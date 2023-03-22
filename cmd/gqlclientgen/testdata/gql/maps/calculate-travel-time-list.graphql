@@ -1,0 +1,6 @@
+# CalculateTimeTravelList - Calculate travel time between multiple pairs of locations
+query CalculateTimeTravelList($pairs: [LocationPair!]!, $roundOff: Boolean!) {
+  calculateTravelTimeList(request: { pairs: $pairs, roundOff: $roundOff }) {
+    travelTimeMinutes
+  }
+}

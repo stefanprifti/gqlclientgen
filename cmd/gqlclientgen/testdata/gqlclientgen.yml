@@ -1,0 +1,10 @@
+version: 1
+
+services:
+  - name: Maps Service
+    package: maps
+    url: https://google-maps-develop.mcmakler.com/query
+    operations:
+      root: ./gql/maps
+    client:
+      root: ./pkg/maps

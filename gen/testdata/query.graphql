@@ -1,0 +1,8 @@
+query CalculateTimeTravelList($pairs: [LocationPair!]!, $roundOff: Boolean!) {
+  calculateTravelTimeList(request: { pairs: $pairs, roundOff: $roundOff }) {
+    ttm: travelTimeMinutes
+    test {
+      a
+    }
+  }
+}

@@ -1,0 +1,45 @@
+input CalculateListRequest{
+	pairs: [LocationPair!]!
+	roundOff: Boolean!
+}
+type CalculateListResponse {
+	travelTimeMinutes: [Int!]!
+}
+input CalculateRequest{
+	source: Location!
+	destination: Location!
+	roundOff: Boolean!
+}
+type CalculateResponse {
+	travelTimeMinutes: Int!
+}
+enum Country {
+	Germany
+	France
+	Austria
+}
+scalar DateTime
+input Location{
+	postalCode: String!
+	street: String
+	city: String
+	country: Country!
+}
+input LocationPair{
+	source: Location!
+	destination: Location!
+}
+type Mutation {
+	_default: String!
+}
+type Query {
+	_default: String!
+	calculateTravelTime(request: CalculateRequest!): CalculateResponse!
+	calculateTravelTimeList(request: CalculateListRequest!): CalculateListResponse!
+	_service: _Service!
+}
+scalar _Any
+scalar _FieldSet
+type _Service {
+	sdl: String
+}

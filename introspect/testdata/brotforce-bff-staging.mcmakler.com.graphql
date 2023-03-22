@@ -1,0 +1,3218 @@
+type Query {
+	searchGoogleUsers(filter: GoogleUsersFilter): GoogleUsersPayload
+	searchGoogleGroups(filter: GoogleGroupsFilter): GoogleGroupsPayload
+	propertyBySalesforceId(salesforceId: ID!, version: Int): Property
+	propertyVersionsBySalesforceId(salesforceId: ID!): [Property!]!
+	searchApplications(search: String, limit: Int, page: Int, filters: ApplicationFilter): [Application!]
+	getUsage(types: [UsageType!]!, opportunityIds: [String!], brokerEmails: [String!]): [Usage!]
+	brokerEvent(id: ID!): IEvent
+	brokerEvents(filter: EventFilter!, sort: EventSort): [IEvent]!
+	getApplications(filter: PbApplicationFilter, pagination: PbPagination): GetApplicationsResponse!
+	getNotifications: GetNotificationsResponse!
+	getBrokerRealEstates(filter: BrokerRealEstatesFilter!, pagination: BrePagination): GetBrokerRealEstatesResponse!
+	searchAdvertisements(search: String!, limit: Int!, page: Int, responsibleAgentId: String): [Advertisement!]
+	getTimeslots(filter: TimeslotFilter!): GetTimeslotsResponse!
+}
+input GoogleUsersFilter{
+	email: String
+	search: String
+}
+type GoogleUsersPayload {
+	users: [GoogleUser!]
+	nextPageToken: String
+}
+type GoogleUser {
+	id: ID!
+	email: String!
+	firstName: String
+	lastName: String
+}
+type GoogleGroupsPayload {
+	groups: [GoogleGroup!]
+	nextPageToken: String
+}
+input GoogleGroupsFilter{
+	search: String
+}
+type GoogleGroup {
+	id: ID!
+	email: String!
+	name: String
+	description: String
+}
+type Address {
+	additionalAddress: String
+	city: String
+	country: CountryEnum
+	latitude: Float
+	longitude: Float
+	normalizedAddress: String
+	postalCode: String
+	region: String
+	streetAndNumber: String
+}
+input AddressInput{
+	additionalAddress: String
+	city: String
+	country: CountryEnum
+	latitude: Float
+	longitude: Float
+	normalizedAddress: String
+	postalCode: String
+	region: String
+	streetAndNumber: String
+}
+type Apartment {
+	apartmentType: ApartmentTypeEnum
+	atticSection: ApartmentAtticSectionEnum
+	basementSection: ApartmentBasementSectionEnum
+	bathroomsCount: Int
+	bedroomsCount: Int
+	building: ApartmentBuildingDetails
+	condition: ApartmentCondition
+	energy: EnergyDetails
+	features: ApartmentFeatures
+	garden: ApartmentGardenDetails
+	hasMaisonetteGallery: Boolean
+	investmentDetails: ApartmentInvestmentDetails
+	level: Int
+	levelType: ApartmentLevelTypeEnum
+	livingAreaSqm: Float
+	maisonetteFloors: ApartmentMaisonetteFloorsEnum
+	multipleValuation: ApartmentMultipleValuationDetails
+	parking: ApartmentParkingDetails
+	roomsCount: Float
+	storageRoomsCount: Int
+	usableAreaSqm: Float
+}
+enum ApartmentAtticSectionEnum {
+	BIG
+	MORE_THAN_A_COMPARTMENT
+	SMALL
+	UNAVAILABLE
+}
+enum ApartmentBasementSectionEnum {
+	BIG
+	MORE_THAN_A_COMPARTMENT
+	SMALL
+	UNAVAILABLE
+	WET_CELLAR
+}
+type ApartmentBuildingDetails {
+	additionalInformation: String
+	apartmentPosition: ApartmentPositionEnum
+	bathroomQuality: BuildingBathroomQualityEnum
+	bathroomWallsMaterial: BuildingWallsMaterialEnum
+	ceilingHeightCentimeter: Float
+	electricCondition: BuildingElectricConditionEnum
+	floorsCondition: BuildingFloorsConditionEnum
+	heatingSystemCondition: BuildingHeatingSystemConditionEnum
+	interiorConstructionCondition: BuildingInteriorConstructionConditionEnum
+	interiorDoorsMaterial: BuildingInteriorDoorsMaterialEnum
+	livingroomWallsMaterial: BuildingWallsMaterialEnum
+	maintenanceReservesEuro: Float
+	pipeSystemCondition: BuildingPipeSystemConditionEnum
+	plotLeased: Boolean
+	plotTotalAreaSqm: Float
+	slopingRoof: RoofSlopeEnum
+	thermalInsulation: BuildingThermalInsulationEnum
+	totalFloorCount: Int
+	totalResidentialUnitsCount: Int
+	windowsGlazing: BuildingWindowsGlazingEnum
+	windowsMaterial: BuildingWindowsMaterialEnum
+}
+input ApartmentBuildingDetailsInput{
+	additionalInformation: String
+	apartmentPosition: ApartmentPositionEnum
+	bathroomQuality: BuildingBathroomQualityEnum
+	bathroomWallsMaterial: BuildingWallsMaterialEnum
+	ceilingHeightCentimeter: Float
+	electricCondition: BuildingElectricConditionEnum
+	floorsCondition: BuildingFloorsConditionEnum
+	heatingSystemCondition: BuildingHeatingSystemConditionEnum
+	interiorConstructionCondition: BuildingInteriorConstructionConditionEnum
+	interiorDoorsMaterial: BuildingInteriorDoorsMaterialEnum
+	livingroomWallsMaterial: BuildingWallsMaterialEnum
+	maintenanceReservesEuro: Float
+	pipeSystemCondition: BuildingPipeSystemConditionEnum
+	plotLeased: Boolean
+	plotTotalAreaSqm: Float
+	slopingRoof: RoofSlopeEnum
+	thermalInsulation: BuildingThermalInsulationEnum
+	totalFloorCount: Int
+	totalResidentialUnitsCount: Int
+	windowsGlazing: BuildingWindowsGlazingEnum
+	windowsMaterial: BuildingWindowsMaterialEnum
+}
+type ApartmentCondition {
+	buildingCondition: ConditionEnum
+	buildingConstructionComponentsQuality: ConditionConstructionComponentsQualityEnum
+	buildingConstructionMaterial: ConditionApartmentBuildingConstructionMaterialEnum
+	condition: ConditionEnum
+	constructionCompletedPercent: Float
+	constructionComponentsQuality: ConditionConstructionComponentsQualityEnum
+	constructionStartYear: Int
+	constructionStatus: ConditionConstructionStatusEnum
+	constructionYear: Int
+	firstOccupancySinceRenovation: Boolean
+	hasDampWalls: Boolean
+	hasDryRot: Boolean
+	isFullyRenovated: Boolean
+	isFurnishedByStarArchitecture: Boolean
+	isProtectedHistoricalBuilding: Boolean
+	lastModernizationYear: Int
+	lastRenovationYear: Int
+	modernizationDegree: ConditionModernizationDegreeEnum
+	projectedConstructionCompletionYear: Int
+	renovationBacklogEuro: Int
+}
+input ApartmentConditionInput{
+	buildingCondition: ConditionEnum
+	buildingConstructionComponentsQuality: ConditionConstructionComponentsQualityEnum
+	buildingConstructionMaterial: ConditionApartmentBuildingConstructionMaterialEnum
+	condition: ConditionEnum
+	constructionCompletedPercent: Float
+	constructionComponentsQuality: ConditionConstructionComponentsQualityEnum
+	constructionStartYear: Int
+	constructionStatus: ConditionConstructionStatusEnum
+	constructionYear: Int
+	firstOccupancySinceRenovation: Boolean
+	hasDampWalls: Boolean
+	hasDryRot: Boolean
+	isFullyRenovated: Boolean
+	isFurnishedByStarArchitecture: Boolean
+	isProtectedHistoricalBuilding: Boolean
+	lastModernizationYear: Int
+	lastRenovationYear: Int
+	modernizationDegree: ConditionModernizationDegreeEnum
+	projectedConstructionCompletionYear: Int
+	renovationBacklogEuro: Int
+}
+type ApartmentFeatures {
+	balcony: BalconyDetails
+	bathroomFloorMaterial: FeatureBathroomFloorMaterialEnum
+	bathroomQuality: FeatureBathroomQualityEnum
+	brightnessLevel: FeatureBrightnessLevelEnum
+	electricsQuality: FeatureElectricsQualityEnum
+	enclosedStreet: FeatureEnclosedStreetEnum
+	freightElevatorCount: Int @deprecated(reason: "Use hasFreightElevator instead")
+	guestToiletCount: Int
+	hasAirConditioning: Boolean
+	hasAlarmSystem: Boolean
+	hasBathDaylight: Boolean
+	hasBathtub: Boolean
+	hasBikeStorageRoom: Boolean
+	hasCableOrSatellite: Boolean
+	hasCleaningService: Boolean
+	hasCommonRoofTerrace: Boolean
+	hasDedicatedRoofTerrace: Boolean
+	hasElectricShutters: Boolean
+	hasEnsuiteBathroom: Boolean
+	hasFacilityManagement: Boolean
+	hasFirePlace: Boolean
+	hasFloorToCeilingWindows: Boolean
+	hasFreightElevator: Boolean
+	hasFurniture: Boolean
+	hasHeatedBathroomFloors: Boolean
+	hasPassengerElevator: Boolean
+	hasSauna: Boolean
+	hasSharedLaundryRoom: Boolean
+	hasShower: Boolean
+	hasVideoIntercom: Boolean
+	hasWellnessSpace: Boolean
+	hasWhirlpool: Boolean
+	hasWindowsSunProtection: Boolean
+	hasWinterService: Boolean
+	interiorQuality: FeatureInteriorQualityEnum
+	isBarrierFree: Boolean
+	isSmartHome: Boolean
+	kitchen: KitchenDetails
+	largestLivingRoomAreaSqm: Float
+	livingroomFloorMaterial: FeatureLivingroomFloorMaterialEnum
+	noiseLevel: FeatureNoiseEnum
+	outsideView: FeatureOutsideViewEnum
+	passengerElevatorCount: Int @deprecated(reason: "Use hasPassengerElevator instead")
+	washmachine: FeatureWashmachineEnum
+}
+input ApartmentFeaturesInput{
+	balcony: BalconyDetailsInput
+	bathroomFloorMaterial: FeatureBathroomFloorMaterialEnum
+	bathroomQuality: FeatureBathroomQualityEnum
+	brightnessLevel: FeatureBrightnessLevelEnum
+	electricsQuality: FeatureElectricsQualityEnum
+	enclosedStreet: FeatureEnclosedStreetEnum
+	freightElevatorCount: Int
+	guestToiletCount: Int
+	hasAirConditioning: Boolean
+	hasAlarmSystem: Boolean
+	hasBathDaylight: Boolean
+	hasBathtub: Boolean
+	hasBikeStorageRoom: Boolean
+	hasCableOrSatellite: Boolean
+	hasCleaningService: Boolean
+	hasCommonRoofTerrace: Boolean
+	hasDedicatedRoofTerrace: Boolean
+	hasElectricShutters: Boolean
+	hasEnsuiteBathroom: Boolean
+	hasFacilityManagement: Boolean
+	hasFirePlace: Boolean
+	hasFloorToCeilingWindows: Boolean
+	hasFreightElevator: Boolean
+	hasFurniture: Boolean
+	hasHeatedBathroomFloors: Boolean
+	hasPassengerElevator: Boolean
+	hasSauna: Boolean
+	hasSharedLaundryRoom: Boolean
+	hasShower: Boolean
+	hasVideoIntercom: Boolean
+	hasWellnessSpace: Boolean
+	hasWhirlpool: Boolean
+	hasWindowsSunProtection: Boolean
+	hasWinterService: Boolean
+	interiorQuality: FeatureInteriorQualityEnum
+	isBarrierFree: Boolean
+	isSmartHome: Boolean
+	kitchen: KitchenDetailsInput
+	largestLivingRoomAreaSqm: Float
+	livingroomFloorMaterial: FeatureLivingroomFloorMaterialEnum
+	noiseLevel: FeatureNoiseEnum
+	outsideView: FeatureOutsideViewEnum
+	passengerElevatorCount: Int
+	washmachine: FeatureWashmachineEnum
+}
+type ApartmentGardenDetails {
+	gardenSize: GardenSizeEnum
+	gardenTerraceAvailable: GardenTerraceEnum
+	gardenUsage: GardenUsageEnum
+	hasDirectAccess: Boolean
+	hasGarden: Boolean
+	hasHousesAndArbours: Boolean
+	hasOutdoorFacilities: Boolean
+	hasPond: Boolean
+	hasSouthExposure: Boolean
+	hasSwimmingpool: Boolean
+	quality: GardenQualityEnum
+	terraceSize: GardenTerraceSizeEnum
+	terraceUsage: GardenTerraceUsageEnum
+	winterGarden: ApartmentWinterGardenEnum
+}
+input ApartmentGardenDetailsInput{
+	gardenSize: GardenSizeEnum
+	gardenTerraceAvailable: GardenTerraceEnum
+	gardenUsage: GardenUsageEnum
+	hasDirectAccess: Boolean
+	hasGarden: Boolean
+	hasHousesAndArbours: Boolean
+	hasOutdoorFacilities: Boolean
+	hasPond: Boolean
+	hasSouthExposure: Boolean
+	hasSwimmingpool: Boolean
+	quality: GardenQualityEnum
+	terraceSize: GardenTerraceSizeEnum
+	terraceUsage: GardenTerraceUsageEnum
+	winterGarden: ApartmentWinterGardenEnum
+}
+input ApartmentInput{
+	apartmentType: ApartmentTypeEnum
+	atticSection: ApartmentAtticSectionEnum
+	basementSection: ApartmentBasementSectionEnum
+	bathroomsCount: Int
+	bedroomsCount: Int
+	building: ApartmentBuildingDetailsInput
+	condition: ApartmentConditionInput
+	energy: EnergyDetailsInput
+	features: ApartmentFeaturesInput
+	garden: ApartmentGardenDetailsInput
+	hasMaisonetteGallery: Boolean
+	investmentDetails: ApartmentInvestmentDetailsInput
+	level: Int
+	levelType: ApartmentLevelTypeEnum
+	livingAreaSqm: Float
+	maisonetteFloors: ApartmentMaisonetteFloorsEnum
+	multipleValuation: ApartmentMultipleValuationDetailsInput
+	parking: ApartmentParkingDetailsInput
+	roomsCount: Float
+	storageRoomsCount: Int
+	usableAreaSqm: Float
+}
+type ApartmentInvestmentDetails {
+	baseCurrentRentEuro: Float
+	isHolidayApartment: Boolean
+	lastRentEuro: Float
+	lastRentalYear: Int
+	nonRecoverableCostsEuro: Float
+	ownerAge: Int
+	plotCoOwnershipShare: Float
+	potentialInvestmentObject: ApartmentInvestmentStatusEnum
+	rentedSinceYear: Int
+	rentedTillYear: Int
+	totalAncillaryCostsEuro: Float
+}
+input ApartmentInvestmentDetailsInput{
+	baseCurrentRentEuro: Float
+	isHolidayApartment: Boolean
+	lastRentEuro: Float
+	lastRentalYear: Int
+	nonRecoverableCostsEuro: Float
+	ownerAge: Int
+	plotCoOwnershipShare: Float
+	potentialInvestmentObject: ApartmentInvestmentStatusEnum
+	rentedSinceYear: Int
+	rentedTillYear: Int
+	totalAncillaryCostsEuro: Float
+}
+enum ApartmentInvestmentStatusEnum {
+	NO
+	NO_RENTED
+	YES_EMPTY
+	YES_FIRST_TIME
+	YES_OWN_USE
+	YES_RENTED
+}
+enum ApartmentLevelTypeEnum {
+	BASEMENT
+	FIRST_FLOOR
+	GROUND_FLOOR
+	MEZZANINE_FLOOR
+	MIDDLE_FLOOR
+	TOP_FLOOR
+}
+enum ApartmentMaisonetteFloorsEnum {
+	GALLERY_ONLY
+	MORE_THAN_THREE
+	ONE
+	THREE
+	TWO
+}
+type ApartmentMultipleValuationDetails {
+	additionalInformation: String
+	multipleCount: Int
+}
+input ApartmentMultipleValuationDetailsInput{
+	additionalInformation: String
+	multipleCount: Int
+}
+type ApartmentParkingDetails {
+	carParkingCount: Int
+	carPortCount: Int
+	constructionStyle: GarageConstructionStyleEnum
+	duplexParkingCount: Int
+	isResidentParking: Boolean
+	openParkingCount: Int
+	ownedGarageParkingCount: Int
+	parkingRentEuro: Float
+	sharedParkingCount: Int
+}
+input ApartmentParkingDetailsInput{
+	carParkingCount: Int
+	carPortCount: Int
+	constructionStyle: GarageConstructionStyleEnum
+	duplexParkingCount: Int
+	isResidentParking: Boolean
+	openParkingCount: Int
+	ownedGarageParkingCount: Int
+	parkingRentEuro: Float
+	sharedParkingCount: Int
+}
+enum ApartmentPositionEnum {
+	BACK_CENTER
+	BACK_LEFT
+	BACK_RIGHT
+	CENTER
+	FRONT_CENTER
+	FRONT_LEFT
+	FRONT_RIGHT
+	LEFT
+	OTHER
+	RIGHT
+	SIDE_CENTER
+	SIDE_LEFT
+	SIDE_RIGHT
+}
+enum ApartmentTypeEnum {
+	DUPLEX
+	LOFT
+	PENTHOUSE
+	STANDARD
+}
+enum ApartmentWinterGardenEnum {
+	EXCLUSIVELY_USABLE_UNHEATED_WINTER_GARDEN
+	HEATED_WINTER_GARDEN_THAT_CAN_BE_USED_EXCLUSIVELY
+	NOT_USABLE
+	SHARED_HEATED_WINTER_GARDEN
+	SHARED_UNHEATED_WINTER_GARDEN
+}
+enum ArableEnum {
+	COMPLETELY_BUILDABLE
+	NOT_BUILDABLE
+	PARTLY_BUILDABLE
+}
+type BalconyDetails {
+	balconyCount: Int
+	hasBalcony: Boolean
+	hasFrenchBalcony: Boolean
+	hasSouthExposureBalcony: Boolean
+	loggiaCount: Int
+	roof: BalconyRoofEnum
+	size: BalconySizeEnum
+}
+input BalconyDetailsInput{
+	balconyCount: Int
+	hasBalcony: Boolean
+	hasFrenchBalcony: Boolean
+	hasSouthExposureBalcony: Boolean
+	loggiaCount: Int
+	roof: BalconyRoofEnum
+	size: BalconySizeEnum
+}
+enum BalconyRoofEnum {
+	FULL
+	NO_COVER
+	PARTIAL
+}
+enum BalconySizeEnum {
+	LARGE
+	NORMAL
+	SMALL
+}
+enum BuildingBathroomQualityEnum {
+	DEFECTIVE
+	MODERN
+	NORMAL
+}
+enum BuildingCeilingConstructionStyleEnum {
+	HIGH_GRADE
+	SOLID
+	WOODEN_BEAMS
+}
+type BuildingDetails {
+	additionalInformation: String
+	bathroomQuality: BuildingBathroomQualityEnum
+	bathroomWallsMaterial: BuildingWallsMaterialEnum
+	buildingHeightMeter: Float
+	ceilingConstructionStyle: BuildingCeilingConstructionStyleEnum
+	ceilingHeightCentimeter: Float
+	electricCondition: BuildingElectricConditionEnum
+	exteriorDoorsMaterial: BuildingExteriorDoorMaterialEnum
+	exteriorWallsFacade: BuildingExteriorWallsFacadeEnum
+	exteriorWallsMaterial: BuildingExteriorWallsMaterialEnum
+	floorsCondition: BuildingFloorsConditionEnum
+	grossFloorAreaSqm: Float
+	guttersMaterial: BuildingGuttersMaterialEnum
+	hasDormer: Boolean
+	hasFloorPlanImprovements: Boolean
+	hasRoofHeating: Boolean
+	hasSoundProofing: Boolean
+	heatingSystemCondition: BuildingHeatingSystemConditionEnum
+	interiorConstructionCondition: BuildingInteriorConstructionConditionEnum
+	interiorDoorsMaterial: BuildingInteriorDoorsMaterialEnum
+	interiorWallsMaterial: BuildingInteriorWallsMaterialEnum
+	livingroomWallsMaterial: BuildingWallsMaterialEnum
+	pipeSystemCondition: BuildingPipeSystemConditionEnum
+	roofConstructionStyle: BuildingRoofConstructionStyleEnum
+	roofInsulation: BuildingRoofInsulationEnum
+	roofMaterial: BuildingRoofMaterialEnum
+	roofShape: BuildingRoofShapeEnum
+	stairsConstructionStyle: BuildingStairsConstructionStyleEnum
+	stairsMaterial: BuildingStairsMaterialEnum
+	thermalInsulation: BuildingThermalInsulationEnum
+	weightBearingInteriorWalls: BuildingWeightBearingInteriorWallsEnum
+	windowsGlazing: BuildingWindowsGlazingEnum
+	windowsMaterial: BuildingWindowsMaterialEnum
+}
+input BuildingDetailsInput{
+	additionalInformation: String
+	bathroomQuality: BuildingBathroomQualityEnum
+	bathroomWallsMaterial: BuildingWallsMaterialEnum
+	buildingHeightMeter: Float
+	ceilingConstructionStyle: BuildingCeilingConstructionStyleEnum
+	ceilingHeightCentimeter: Float
+	electricCondition: BuildingElectricConditionEnum
+	exteriorDoorsMaterial: BuildingExteriorDoorMaterialEnum
+	exteriorWallsFacade: BuildingExteriorWallsFacadeEnum
+	exteriorWallsMaterial: BuildingExteriorWallsMaterialEnum
+	floorsCondition: BuildingFloorsConditionEnum
+	grossFloorAreaSqm: Float
+	guttersMaterial: BuildingGuttersMaterialEnum
+	hasDormer: Boolean
+	hasFloorPlanImprovements: Boolean
+	hasRoofHeating: Boolean
+	hasSoundProofing: Boolean
+	heatingSystemCondition: BuildingHeatingSystemConditionEnum
+	interiorConstructionCondition: BuildingInteriorConstructionConditionEnum
+	interiorDoorsMaterial: BuildingInteriorDoorsMaterialEnum
+	interiorWallsMaterial: BuildingInteriorWallsMaterialEnum
+	livingroomWallsMaterial: BuildingWallsMaterialEnum
+	pipeSystemCondition: BuildingPipeSystemConditionEnum
+	roofConstructionStyle: BuildingRoofConstructionStyleEnum
+	roofInsulation: BuildingRoofInsulationEnum
+	roofMaterial: BuildingRoofMaterialEnum
+	roofShape: BuildingRoofShapeEnum
+	stairsConstructionStyle: BuildingStairsConstructionStyleEnum
+	stairsMaterial: BuildingStairsMaterialEnum
+	thermalInsulation: BuildingThermalInsulationEnum
+	weightBearingInteriorWalls: BuildingWeightBearingInteriorWallsEnum
+	windowsGlazing: BuildingWindowsGlazingEnum
+	windowsMaterial: BuildingWindowsMaterialEnum
+}
+enum BuildingElectricConditionEnum {
+	DAMAGED
+	MODERNIZED
+	NORMAL
+}
+enum BuildingExteriorDoorMaterialEnum {
+	HIGH_GRADE_IN_GOOD_CONDITION
+	HIGH_GRADE_IN_POOR_CONDITION
+	METAL_IN_GOOD_CONDITION
+	METAL_IN_POOR_CONDITION
+	WOODEN_IN_GOOD_CONDITION
+	WOODEN_IN_POOR_CONDITION
+}
+enum BuildingExteriorWallsFacadeEnum {
+	ARTIFICIAL_STONE
+	CLINKER
+	CONCRETE
+	GLASS
+	HIGH_QUALITY_PLASTERING
+	METAL
+	MIXED_STONE
+	NATURAL_STONE
+	NO_FACADE
+	OTHER
+	SIMPLE_PLASTERING
+	SLATE
+	WOOD
+}
+enum BuildingExteriorWallsMaterialEnum {
+	BRICK_MASONRY
+	LOG_CONSTRUCTION
+	NONE
+	OTHER
+	PANEL_CONSTRUCTION
+	REAR_VENTILATED_CURTAIN_WALL
+	SINGLE_SHELL_MASONRY
+	SOLID_WALL_PANELS
+	TWO_SHELL_MASONRY
+	WOODEN_FRAMEWORK
+}
+enum BuildingFloorsConditionEnum {
+	MINT_CONDITION
+	REFURBISHMENT_NEEDED
+	TRACES_OF_USAGE
+}
+enum BuildingGuttersMaterialEnum {
+	ALUMINUM
+	COPPER
+	OTHER
+	PLASTIC
+	STEEL
+	ZINC
+}
+enum BuildingHeatingSystemConditionEnum {
+	DEFECTIVE
+	FUNCTIONAL
+}
+enum BuildingInteriorConstructionConditionEnum {
+	BUILDING_CONDITION
+	MODERNIZED
+}
+enum BuildingInteriorDoorsMaterialEnum {
+	GLASS
+	HIGH_QUALITY_VENEER
+	NORMAL_VENEER
+	OTHER_HIGH_QUALITY
+	OTHER_SIMPLE
+	SIMPLE_VENEER
+}
+enum BuildingInteriorWallsMaterialEnum {
+	CLAY
+	CONCRETE
+	GYPSUM_SLAB_WALLS
+	GYPSUM_STUD_WALLS
+	JUST_OUTER_WALL
+	LIMESTONE
+	OTHER
+	OTHER_STONE_WALLS
+	REINFORCED_CONCRETE
+	WOOD
+}
+enum BuildingPipeSystemConditionEnum {
+	DEFECTIVE
+	MODERNIZED
+	NORMAL
+	NORMAL_LEAD_PIPES
+	NORMAL_NO_LEAD_PIPES
+}
+enum BuildingRoofConstructionStyleEnum {
+	SOLID
+	WOODEN_BEAMS
+}
+enum BuildingRoofInsulationEnum {
+	BUILDING_CONDITION
+	BUILDING_CONDITION_LEAKY
+	MODERNIZED
+	MODERNIZED_LEAKY
+}
+enum BuildingRoofMaterialEnum {
+	BITUMEN_SHINGLES
+	CLAY_ROOF_TILES
+	COATED_CLAY_ROOF_TILES
+	COATED_CONCRETE_ROOF_TILES
+	COPPER
+	FIBER_CEMENT_PANELS
+	OTHER_HIGH_GRADE
+	OTHER_SIMPLE
+	PLASTIC_ROOF_TILES
+	REED
+	ROOFING_FELT
+	SHEET_METAL
+	SIMPLE_CONCRETE_ROOF_TILES
+	SLATE
+	STRAW
+	WOOD
+}
+enum BuildingRoofShapeEnum {
+	ARCHED_ROOF_CONSTRUCTION
+	CROOKED_HIP_ROOF
+	GABLE_ROOF
+	HIPPED_ROOF
+	MONO_PITCH_ROOF
+	SPECIAL_ROOF_SHAPE
+}
+enum BuildingStairsConstructionStyleEnum {
+	DOUBLE_TRACK
+	MONO_TRACK
+	MULTI_TRACK
+	SPIRAL_TRACK
+}
+enum BuildingStairsMaterialEnum {
+	CONCRETE
+	HARDWOOD
+	OTHER_HIGH_GRADE
+	OTHER_SIMPLE
+	REINFORCED_CONCRETE
+	SOFTWOOD
+	STEEL
+}
+enum BuildingThermalInsulationEnum {
+	BUILDING_CONDITION
+	MODERNIZED
+}
+enum BuildingWallsMaterialEnum {
+	ARTIFICIAL_STONE
+	CERAMICS
+	HIGH_GRADE_PLASTER
+	HIGH_GRADE_STUCCO
+	HIGH_GRADE_WALLPAPER
+	HIGH_GRADE_WOOD
+	MARBLE
+	METAL_PANELING
+	NONE
+	OTHER
+	OTHER_NATURAL_STONE
+	OTHER_TILES
+	SIMPLE_PLASTER
+	SIMPLE_STUCCO
+	SIMPLE_WALLPAPER
+	SYNTHETIC
+	WOOD
+}
+enum BuildingWeightBearingInteriorWallsEnum {
+	EXTERNAL_LOAD_BEARING_WALLS
+	LOAD_BEARING_INTERIOR_AND_EXTERIOR_WALLS
+	LOAD_BEARING_INTERIOR_WALLS
+}
+enum BuildingWindowsGlazingEnum {
+	DOUBLE_GLASS_WINDOWS
+	MULTIPLE_GLASS_WINDOWS
+	SINGLE_GLASS_WINDOWS
+	WINDOWS_WITH_HIGH_QUALITY_SPECIAL_GLASSES
+}
+enum BuildingWindowsMaterialEnum {
+	METAL_IN_GOOD_CONDITION
+	METAL_IN_POOR_CONDITION
+	PLASTIC_IN_GOOD_CONDITION
+	PLASTIC_IN_POOR_CONDITION
+	WOODEN_IN_GOOD_CONDITION
+	WOODEN_IN_POOR_CONDITION
+}
+type CommercialBuilding {
+	additionalInformation: String
+	plotAreaSqm: Float
+	subType: CommercialBuildingSubTypeEnum
+	usableAreaSqm: Float
+}
+input CommercialBuildingInput{
+	additionalInformation: String
+	plotAreaSqm: Float
+	subType: CommercialBuildingSubTypeEnum
+	usableAreaSqm: Float
+}
+enum CommercialBuildingSubTypeEnum {
+	GASTRONOMY
+	HOTEL
+	OFFICE_OR_DOCTORS_OFFICE
+	RETAIL_TRADE
+	SPECIAL_INDUSTRY_OR_OTHER
+	STORAGE_OR_MANUFACTURING
+	WORKSHOP
+}
+enum CommercialUnitsConvertibleEnum {
+	NO
+	SOME
+	YES
+}
+type CommercialUnitsInfo {
+	areaSqm: Float
+	convertible: CommercialUnitsConvertibleEnum
+	gastronomyUsageCount: Int
+	necessaryInvestmentTransformationEuro: Float
+	officeUsageCount: Int
+	otherUsageCount: Int
+	productionUsageCount: Int
+	rented: MultiRented
+	retailUsageCount: Int
+	unitsCount: Int
+}
+input CommercialUnitsInfoInput{
+	areaSqm: Float
+	convertible: CommercialUnitsConvertibleEnum
+	gastronomyUsageCount: Int
+	necessaryInvestmentTransformationEuro: Float
+	officeUsageCount: Int
+	otherUsageCount: Int
+	productionUsageCount: Int
+	rented: MultiRentedInput
+	retailUsageCount: Int
+	unitsCount: Int
+}
+enum ConditionApartmentBuildingConstructionMaterialEnum {
+	ARCHITECT_HOUSE
+	BLOCK_HOUSE
+	BUILDING_KIT_HOUSE
+	FACHWERK_HOUSE
+	MISCELLANEOUS
+	PASSIVE_HOUSE
+	PREFABRICATED_HOUSE
+	SOLID_HOUSE
+	WOOD_HOUSE
+}
+enum ConditionConstructionComponentsQualityEnum {
+	ASBESTOS
+	AVERAGE
+	DAMAGED
+	HIGH
+	SIMPLE
+}
+enum ConditionConstructionStatusEnum {
+	COMPLETED
+	INACTIVE
+	IN_PROGRESS
+	NEW
+	PLANNED
+}
+enum ConditionEnum {
+	GUTTED
+	MINT_CONDITION
+	NEEDS_RENOVATION
+	NEW_CONSTRUCTION
+	RIPE_FOR_DEMOLITION
+	WELL_KEPT
+}
+enum ConditionHouseConstructionMaterialEnum {
+	ARCHITECT_HOUSE
+	BIG_HOUSE
+	KIT_HOUSE
+	LOG_CABIN
+	OTHER
+	PASSIVE_HOUSE
+	PREBUILT_HOUSE
+	TIMBERED_HOUSE
+	WOODEN_HOUSE
+}
+enum ConditionModernizationDegreeEnum {
+	FULLY_MODERNIZED
+	HARDLY_MODERNIZED
+	MOSTLY_MODERNIZED
+	NOT_MODERNIZED
+	PARTLY_MODERNIZED
+}
+enum CountryEnum {
+	AT
+	DE
+	FR
+}
+input CreatePropertyInput{
+	salesforceId: ID!
+}
+type CreatePropertyPayload {
+	property: Property!
+}
+type Customer {
+	cookieConsent: Boolean!
+	createdAt: DateTime!
+	customerType: CustomerTypeEnum!
+	email: String!
+	emailConfirmedAt: DateTime
+	firstName: String!
+	gdprConsent: Boolean!
+	id: ID!
+	lastName: String!
+	phone: String
+	registeredAt: DateTime!
+	salutation: SalutationEnum
+	status: CustomerStatusEnum!
+	updatedAt: DateTime!
+}
+enum CustomerIntentEnum {
+	OTHER
+	PURCHASE
+	SALE
+}
+enum CustomerStatusEnum {
+	ACTIVE
+	BLOCKED
+	INACTIVE
+}
+enum CustomerTypeEnum {
+	FAMILY
+	HEIRS
+	MR
+	MRS
+	ORGANIZATION_OR_OTHER
+}
+# A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+scalar DateTime
+type DevelopmentPlans {
+	approvedFullFloorsCount: Int
+	basicAreaFactor: String
+	basicFloorFactor: String
+	hasConstructionRegisterEntries: Boolean
+}
+enum DevelopmentPlansEnum {
+	NO
+	NO_BUT_DEVELOPMENT_ACCORDING_TO_THE_AREA
+	YES
+}
+input DevelopmentPlansInput{
+	approvedFullFloorsCount: Int
+	basicAreaFactor: String
+	basicFloorFactor: String
+	hasConstructionRegisterEntries: Boolean
+}
+enum DevelopmentTypeEnum {
+	READY_FOR_CONSTRUCTION_FULLY_DEVELOPED
+	READY_FOR_CONSTRUCTION_PARTIALLY_DEVELOPED
+	READY_TO_BUILD
+	UNFINISHED_AREA_NOT_DEVELOPED
+}
+enum EnergyCarriersEnum {
+	COAL
+	DISTRICT_HEATING
+	ELECTRICITY
+	GAS
+	GEOTHERMAL_ENERGY
+	GRAVITY_HEATING
+	HEAT_PUMP_HEATING
+	INFRARED_HEATING
+	NIGHT_STORAGE_HEATER
+	OIL
+	OTHER_ENERGY_SOURCE_OR_TYPE_OF_HEATING
+	SOLAR
+	WIND_ENERGY
+	WOOD_OR_PELLETS
+}
+type EnergyDetails {
+	additionalEnergyCarriers: EnergyCarriersEnum
+	constructionOrRenovationYear: Int
+	energyConsumptionValue: String @deprecated(reason: "Use energyConsumptionkWh instead")
+	energyConsumptionkWh: Float
+	energyGeneratedkWh: Float
+	energyRatingType: EnergyRatingTypeEnum
+	hasFurnaceHeating: Boolean
+	hasHeatedFloors: Boolean
+	hasPhotoVoltaicSystem: Boolean
+	heatingType: EnergyHeatingTypeEnum
+	mainEnergyCarriers: EnergyCarriersEnum
+}
+input EnergyDetailsInput{
+	additionalEnergyCarriers: EnergyCarriersEnum
+	constructionOrRenovationYear: Int
+	energyConsumptionValue: String
+	energyConsumptionkWh: Float
+	energyGeneratedkWh: Float
+	energyRatingType: EnergyRatingTypeEnum
+	hasFurnaceHeating: Boolean
+	hasHeatedFloors: Boolean
+	hasPhotoVoltaicSystem: Boolean
+	heatingType: EnergyHeatingTypeEnum
+	mainEnergyCarriers: EnergyCarriersEnum
+}
+enum EnergyHeatingTypeEnum {
+	CENTRAL_HEATING
+	COGENERATION_UNIT
+	FLOOR_HEATING
+	INDIVIDUAL_HEATING
+	OTHER_HEATING_SYSTEM
+}
+enum EnergyRatingTypeEnum {
+	CONSUMPTION_CERTIFICATE
+	DEMAND_CERTIFICATE
+	NONE
+}
+type FarmHouse {
+	farmHouseInfo: FarmHouseInfo
+	singleFamilyHouseInfo: SingleFamilyHouseInfo
+}
+type FarmHouseInfo {
+	farmAreaSqm: Float
+	otherFactors: String
+}
+input FarmHouseInfoInput{
+	farmAreaSqm: Float
+	otherFactors: String
+}
+input FarmHouseInput{
+	farmHouseInfo: FarmHouseInfoInput
+	singleFamilyHouseInfo: SingleFamilyHouseInfoInput
+}
+enum FeatureBathroomFloorMaterialEnum {
+	ARTIFICIAL_STONE
+	CERAMIC_TILES
+	CONCRETE
+	CORK
+	FINE_STONEWARE
+	LAMINATE
+	LINOLEUM
+	MARBLE
+	NO_COATING
+	OTHER_NATURAL_STONE
+	PORCELAIN_STONEWARE
+	PVC
+	SLATE
+	STONE_CARPET
+	TERRAZZO_TILES
+	VINYL
+	WOODEN
+}
+enum FeatureBathroomQualityEnum {
+	AVERAGE
+	HIGH
+	LUXURY
+	SIMPLE
+}
+enum FeatureBrightnessLevelEnum {
+	DARK
+	LIGHT
+	NORMAL
+}
+enum FeatureElectricsQualityEnum {
+	AVERAGE
+	HIGH
+	LUXURY
+	SIMPLE
+}
+enum FeatureEnclosedStreetEnum {
+	BACK_LANE
+	EXPRESSWAY
+	MULTIPLE_LANE
+	REMOTE
+	TRAFFIC_CALMED
+	TWO_LANE
+}
+enum FeatureInteriorQualityEnum {
+	AVERAGE
+	HIGH
+	LUXURY
+	SIMPLE
+}
+enum FeatureLivingroomFloorMaterialEnum {
+	ARTIFICIAL_STONE
+	CERAMIC_TILES
+	CONCRETE
+	CORK
+	HERRINGBONE_PARQUET
+	HIGH_QUALITY_CARPETING
+	LAMINATE
+	LINOLEUM
+	MOSAIC_PARQUET
+	NATURAL_STONE
+	NO_TOPPING
+	OTHER
+	OTHER_PARQUET
+	PANEL_PARQUET
+	PORCELAIN_STONEWARE
+	PVC
+	SIMPLE_CARPETING
+	VINYL
+	WOODEN_PLANKS
+}
+enum FeatureNoiseEnum {
+	LOUD
+	NORMAL
+	QUIET
+}
+enum FeatureOutsideViewEnum {
+	NATURE
+	NORMAL
+	PANORAMA
+	PLAIN
+	WATER
+}
+enum FeatureWashmachineEnum {
+	IN_ANOTHER_ROOM
+	IN_THE_BATHROOM
+	IN_THE_KITCHEN
+	IN_THE_STOREROOM
+	MULTIPLE_CONNECTIONS
+	NO
+	NOT_SPECIFIED
+}
+enum GarageConstructionStyleEnum {
+	LUXURY_GARAGE
+	PARK_HOUSE_BUILDING
+	READY_MADE_GARAGE
+	SOLID_GARAGE
+	UNDERGROUND_PARK_HOUSE
+}
+type GardenDetails {
+	gardenSize: GardenSizeEnum
+	gardenTerraceAvailable: GardenTerraceEnum
+	hasGarden: Boolean
+	hasHousesAndArbours: Boolean
+	hasOutdoorFacilities: Boolean
+	hasPond: Boolean
+	hasSouthExposure: Boolean
+	hasSwimmingpool: Boolean
+	quality: GardenQualityEnum
+	terraceSize: GardenTerraceSizeEnum
+	winterGarden: GardenWinterGardenEnum
+}
+input GardenDetailsInput{
+	gardenSize: GardenSizeEnum
+	gardenTerraceAvailable: GardenTerraceEnum
+	hasGarden: Boolean
+	hasHousesAndArbours: Boolean
+	hasOutdoorFacilities: Boolean
+	hasPond: Boolean
+	hasSouthExposure: Boolean
+	hasSwimmingpool: Boolean
+	quality: GardenQualityEnum
+	terraceSize: GardenTerraceSizeEnum
+	winterGarden: GardenWinterGardenEnum
+}
+enum GardenQualityEnum {
+	AVERAGE
+	HIGH
+	LUXURY
+	SIMPLE
+}
+enum GardenSizeEnum {
+	LARGE
+	NONE
+	SMALL
+}
+enum GardenTerraceEnum {
+	NONE
+	PORCH
+	TERRACE
+}
+enum GardenTerraceSizeEnum {
+	LARGE
+	SMALL
+}
+enum GardenTerraceUsageEnum {
+	EXCLUSIVELY_USABLE_VERANDA
+	EXCLUSIVE_USABLE_TERRACE
+	NOT_USABLE
+	SHARED_TERRACE
+	SHARED_VERANDA
+}
+enum GardenUsageEnum {
+	EXCLUSIVE_USE
+	NOT_USABLE
+	SHARED
+}
+enum GardenWinterGardenEnum {
+	HEATED
+	NONE
+	UNHEATED
+}
+type House {
+	farmHouse: FarmHouse
+	houseCommon: HouseCommonFields
+	multiFamilyAndBusinessHouse: MultiFamilyAndBusinessHouse
+	multiFamilyHouse: MultiFamilyHouse
+	semiDetachedHouse: SemiDetachedHouse
+	singleFamilyHouse: SingleFamilyHouse
+	specialHouse: SpecialHouse
+	twoOrThreeFamilyHouse: TwoOrThreeFamilyHouse
+	type: HouseType
+}
+enum HouseCommonAtticQualityEnum {
+	FLAT_ROOF_WITH_ROOF_TERRACE
+	FLAT_WITHOUT_ROOF_TERRACE
+	FULLY_DEVELOPED_ATTIC
+	NOT_DEVELOPED_ATTIC_BUT_DEVELOPABLE
+	NOT_DEVELOPED_ATTIC_NOT_DEVELOPABLE
+	PARTLY_DEVELOPED_ATTIC
+}
+enum HouseCommonCellarQualityEnum {
+	CRAWL_SPACE
+	FULL_CELLAR
+	MOIST_CELLAR
+	NO_CELLAR
+	PARTIAL_25
+	PARTIAL_50
+	PARTIAL_75
+	PARTIAL_100
+}
+enum HouseCommonCellarUsableAsLivingSpaceEnum {
+	NO
+	NO_DEVELOPED_BASEMENT_SECTION_AVAILABLE
+	PARTIALLY
+	YES
+}
+type HouseCommonFields {
+	atticQuality: HouseCommonAtticQualityEnum
+	building: BuildingDetails
+	cellarQuality: HouseCommonCellarQualityEnum
+	cellarUsableAsLivingSpace: HouseCommonCellarUsableAsLivingSpaceEnum
+	condition: HouseCondition
+	energy: EnergyDetails
+	garden: GardenDetails
+	hasSharedCellar: Boolean
+	nonRecoverableCostsEuro: Float
+	parking: ParkingDetails
+	plot: PlotDetails
+	secondRental: SecondRental
+	slopingRoof: RoofSlopeEnum
+	totalAncillaryCostsEuro: Float
+	upperFloorsCount: Int
+}
+input HouseCommonFieldsInput{
+	atticQuality: HouseCommonAtticQualityEnum
+	building: BuildingDetailsInput
+	cellarQuality: HouseCommonCellarQualityEnum
+	cellarUsableAsLivingSpace: HouseCommonCellarUsableAsLivingSpaceEnum
+	condition: HouseConditionInput
+	energy: EnergyDetailsInput
+	garden: GardenDetailsInput
+	hasSharedCellar: Boolean
+	nonRecoverableCostsEuro: Float
+	parking: ParkingDetailsInput
+	plot: PlotDetailsInput
+	secondRental: SecondRentalInput
+	slopingRoof: RoofSlopeEnum
+	totalAncillaryCostsEuro: Float
+	upperFloorsCount: Int
+}
+type HouseCondition {
+	condition: ConditionEnum
+	constructionCompletedPercent: Float
+	constructionComponentsQuality: ConditionConstructionComponentsQualityEnum
+	constructionMaterial: ConditionHouseConstructionMaterialEnum
+	constructionStartYear: Int
+	constructionStatus: ConditionConstructionStatusEnum
+	constructionYear: Int
+	firstOccupancySinceRenovation: Boolean
+	hasDampWalls: Boolean
+	hasDryRot: Boolean
+	isFullyRenovated: Boolean
+	isFurnishedByStarArchitecture: Boolean
+	isProtectedHistoricalBuilding: Boolean
+	lastModernizationYear: Int
+	lastRenovationYear: Int
+	modernizationDegree: ConditionModernizationDegreeEnum
+	projectedConstructionCompletionYear: Int
+	renovationBacklogEuro: Int
+}
+input HouseConditionInput{
+	condition: ConditionEnum
+	constructionCompletedPercent: Float
+	constructionComponentsQuality: ConditionConstructionComponentsQualityEnum
+	constructionMaterial: ConditionHouseConstructionMaterialEnum
+	constructionStartYear: Int
+	constructionStatus: ConditionConstructionStatusEnum
+	constructionYear: Int
+	firstOccupancySinceRenovation: Boolean
+	hasDampWalls: Boolean
+	hasDryRot: Boolean
+	isFullyRenovated: Boolean
+	isFurnishedByStarArchitecture: Boolean
+	isProtectedHistoricalBuilding: Boolean
+	lastModernizationYear: Int
+	lastRenovationYear: Int
+	modernizationDegree: ConditionModernizationDegreeEnum
+	projectedConstructionCompletionYear: Int
+	renovationBacklogEuro: Int
+}
+interface HouseFeatures {
+	electricsQuality: FeatureElectricsQualityEnum
+	freightElevatorCount: Int
+	hasAlarmSystem: Boolean
+	hasFreightElevator: Boolean
+	hasPassengerElevator: Boolean
+	isBarrierFree: Boolean
+	passengerElevatorCount: Int
+}
+input HouseInput{
+	farmHouse: FarmHouseInput
+	houseCommon: HouseCommonFieldsInput
+	multiFamilyAndBusinessHouse: MultiFamilyAndBusinessHouseInput
+	multiFamilyHouse: MultiFamilyHouseInput
+	semiDetachedHouse: SemiDetachedHouseInput
+	singleFamilyHouse: SingleFamilyHouseInput
+	specialHouse: SpecialHouseInput
+	twoOrThreeFamilyHouse: TwoOrThreeFamilyHouseInput
+	type: HouseType
+}
+type HouseInvestmentDetails {
+	baseCurrentRentEuro: Float
+	lastRentalYear: Int
+	ownerAge: Int
+	potentialInvestmentObject: HouseInvestmentStatusEnum
+	rentedSinceYear: Int
+	rentedTillYear: Int
+}
+input HouseInvestmentDetailsInput{
+	baseCurrentRentEuro: Float
+	lastRentalYear: Int
+	ownerAge: Int
+	potentialInvestmentObject: HouseInvestmentStatusEnum
+	rentedSinceYear: Int
+	rentedTillYear: Int
+}
+enum HouseInvestmentStatusEnum {
+	NO
+	NO_BUT_ANNUITY
+	YES_EMPTY
+	YES_FIRST_TIME
+	YES_IN_USE
+	YES_RENTED
+}
+enum HousePlotBuildableEnum {
+	FULLY
+	NONE
+	PARTIALLY
+}
+enum HousePlotDensifiableEnum {
+	NO
+	NONE
+	YES_WITHOUT_BUILDING_PERMIT
+	YES_WITH_BUILDING_PERMIT
+}
+enum HouseType {
+	FARM_HOUSE
+	MULTI_FAMILY_AND_BUSINESS_HOUSE
+	MULTI_FAMILY_HOUSE
+	SEMI_DETACHED_HOUSE
+	SINGLE_FAMILY_HOUSE
+	SPECIAL_HOUSE
+	TWO_OR_THREE_FAMILY_HOUSE
+}
+enum KitchenAgeEnum {
+	BETWEEN_1_AND_5_YEARS_AGO
+	BETWEEN_5_AND_10_YEARS_AGO
+	BETWEEN_10_AND_20_YEARS_AGO
+	LESS_THAN_1_YEAR_AGO
+	MORE_THAN_20_YEARS_AGO
+}
+type KitchenDetails {
+	age: KitchenAgeEnum
+	hasBuiltinKitchen: Boolean
+	hasDishwasher: Boolean
+	isOpenKitchen: Boolean
+	kitchenCostEuro: Int
+	ovenType: KitchenOvenEnum
+	size: KitchenSizeEnum
+}
+input KitchenDetailsInput{
+	age: KitchenAgeEnum
+	hasBuiltinKitchen: Boolean
+	hasDishwasher: Boolean
+	isOpenKitchen: Boolean
+	kitchenCostEuro: Int
+	ovenType: KitchenOvenEnum
+	size: KitchenSizeEnum
+}
+enum KitchenOvenEnum {
+	CERAMIC
+	ELECTRIC
+	GAS
+	INDUCTION
+	NONE
+}
+enum KitchenSizeEnum {
+	LARGE_KITCHEN_ABOVE_10M2
+	PANTRY_KITCHEN
+	SMALL_KITCHEN_LESS_THAN_10M2
+}
+type MultiFamilyAndBusinessHouse {
+	commercial: CommercialUnitsInfo
+	maintenanceReservesEuro: Float
+	residential: ResidentialUnitsInfo
+}
+input MultiFamilyAndBusinessHouseInput{
+	commercial: CommercialUnitsInfoInput
+	maintenanceReservesEuro: Float
+	residential: ResidentialUnitsInfoInput
+}
+type MultiFamilyHouse {
+	maintenanceReservesEuro: Float
+	residential: ResidentialUnitsInfo
+}
+input MultiFamilyHouseInput{
+	maintenanceReservesEuro: Float
+	residential: ResidentialUnitsInfoInput
+}
+type MultiHouseFeatures {
+	balconyCount: Int
+	electricsQuality: FeatureElectricsQualityEnum
+	freightElevatorCount: Int @deprecated(reason: "Use hasFreightElevator instead")
+	hasAlarmSystem: Boolean
+	hasBikeStorageRoom: Boolean
+	hasFreightElevator: Boolean
+	hasPassengerElevator: Boolean
+	hasSharedLaundryRoom: Boolean
+	hasTransmissionTower: Boolean
+	hasWellnessSpace: Boolean
+	interiorQuality: FeatureInteriorQualityEnum
+	isBarrierFree: Boolean
+	passengerElevatorCount: Int @deprecated(reason: "Use hasPassengerElevator instead")
+}
+input MultiHouseFeaturesInput{
+	balconyCount: Int
+	electricsQuality: FeatureElectricsQualityEnum
+	freightElevatorCount: Int
+	hasAlarmSystem: Boolean
+	hasBikeStorageRoom: Boolean
+	hasFreightElevator: Boolean
+	hasPassengerElevator: Boolean
+	hasSharedLaundryRoom: Boolean
+	hasTransmissionTower: Boolean
+	hasWellnessSpace: Boolean
+	interiorQuality: FeatureInteriorQualityEnum
+	isBarrierFree: Boolean
+	passengerElevatorCount: Int
+}
+type MultiRented {
+	livingAreaSqm: Float
+	totalRentEuro: Float
+	unitsCount: Int
+}
+input MultiRentedInput{
+	livingAreaSqm: Float
+	totalRentEuro: Float
+	unitsCount: Int
+}
+type Mutation {
+	createProperty(input: CreatePropertyInput!): CreatePropertyPayload
+	submitProperty(input: SubmitPropertyInput!): SubmitPropertyPayload
+	updateProperty(input: UpdatePropertyInput!): UpdatePropertyPayload
+	createApplication(input: CreateApplicationInput!): CreateApplicationPayload
+	saveUsage(input: SaveUsageInput!): SaveUsageResponse
+	submitViewReport(request: SubmitViewReportRequest!): SubmitViewReportResponse!
+	submitOffer(request: SubmitOfferRequest!): SubmitOfferResponse!
+	# Currenly only used to update the state of an application.
+	updateApplication(request: UpdateApplicationRequest!): UpdateApplicationResponse!
+	createEvent(input: CreateEventInput!): CreateEventPayload
+	rescheduleEvent(input: RescheduleEventRequest!): RescheduleEventResponse!
+	updateEvent(input: UpdateEventInput!): UpdateEventPayload
+	bookEvent(request: BookEventRequest!): BookEventResponse!
+	cancelEvent(request: CancelEventRequest!): CancelEventResponse!
+}
+interface NonMultiHouseFeatures {
+	brightnessLevel: FeatureBrightnessLevelEnum
+	enclosedStreet: FeatureEnclosedStreetEnum
+	hasAirConditioning: Boolean
+	hasCableOrSatellite: Boolean
+	hasElectricShutters: Boolean
+	hasEnsuiteBathroom: Boolean
+	hasFirePlace: Boolean
+	hasFloorToCeilingWindows: Boolean
+	hasFurniture: Boolean
+	hasSauna: Boolean
+	hasVideoIntercom: Boolean
+	hasWhirlpool: Boolean
+	hasWindowsSunProtection: Boolean
+	isSmartHome: Boolean
+	largestLivingRoomAreaSqm: Float
+	outsideView: FeatureOutsideViewEnum
+}
+enum OldStockEnum {
+	AGRICULTURE
+	BUSINESS
+	LIVING_HOUSE_OR_MIXED_USE
+	OTHER_REMAINS
+	UNAVAILABLE
+}
+type ParkingDetails {
+	carParkingCount: Int
+	carPortCount: Int
+	constructionStyle: GarageConstructionStyleEnum
+	duplexParkingCount: Int
+	isResidentParking: Boolean
+	openParkingCount: Int
+	ownedGarageParkingCount: Int
+	parkingRentEuro: Float
+}
+input ParkingDetailsInput{
+	carParkingCount: Int
+	carPortCount: Int
+	constructionStyle: GarageConstructionStyleEnum
+	duplexParkingCount: Int
+	isResidentParking: Boolean
+	openParkingCount: Int
+	ownedGarageParkingCount: Int
+	parkingRentEuro: Float
+}
+type Plot {
+	anualLeaseEuro: Float
+	arable: ArableEnum
+	arableAreaSqm: Float
+	development: DevelopmentTypeEnum
+	developmentPlan: DevelopmentPlans
+	developmentPlanAvailable: DevelopmentPlansEnum
+	hasAsphalt: Boolean
+	isContaminated: Boolean
+	isLeasedOut: Boolean
+	isSeparable: Boolean
+	length: Float
+	locationBoundary: String
+	locationParcelLand: String
+	oldStock: OldStockEnum
+	oldStockBasementAreaSqm: Float
+	oldStockBuildingAreaSqm: Float
+	plotType: PlotTypeEnum
+	quality: QualityEnum
+	shape: ShapeEnum
+	slope: SlopeEnum
+	totalAreaSqm: Float
+}
+type PlotDetails {
+	areaSqm: Float
+	buildable: HousePlotBuildableEnum
+	buildableAreaSqm: Float
+	developmentPlan: DevelopmentPlans
+	developmentPlanAvailable: DevelopmentPlansEnum
+	divisiblePlotAreaSqm: Float
+	isDivisible: Boolean
+	lease: PlotLease
+	plotDensifiable: HousePlotDensifiableEnum
+}
+input PlotDetailsInput{
+	areaSqm: Float
+	buildable: HousePlotBuildableEnum
+	buildableAreaSqm: Float
+	developmentPlan: DevelopmentPlansInput
+	developmentPlanAvailable: DevelopmentPlansEnum
+	divisiblePlotAreaSqm: Float
+	isDivisible: Boolean
+	lease: PlotLeaseInput
+	plotDensifiable: HousePlotDensifiableEnum
+}
+input PlotInput{
+	anualLeaseEuro: Float
+	arable: ArableEnum
+	arableAreaSqm: Float
+	development: DevelopmentTypeEnum
+	developmentPlan: DevelopmentPlansInput
+	developmentPlanAvailable: DevelopmentPlansEnum
+	hasAsphalt: Boolean
+	isContaminated: Boolean
+	isLeasedOut: Boolean
+	isSeparable: Boolean
+	length: Float
+	locationBoundary: String
+	locationParcelLand: String
+	oldStock: OldStockEnum
+	oldStockBasementAreaSqm: Float
+	oldStockBuildingAreaSqm: Float
+	plotType: PlotTypeEnum
+	quality: QualityEnum
+	shape: ShapeEnum
+	slope: SlopeEnum
+	totalAreaSqm: Float
+}
+type PlotLease {
+	leaseCostEuro: Float
+	leaseDurationYears: Int @deprecated(reason: "Use leaseEndYear instead")
+	leaseEndYear: Int
+}
+input PlotLeaseInput{
+	leaseCostEuro: Float
+	leaseDurationYears: Int
+	leaseEndYear: Int
+}
+enum PlotTypeEnum {
+	BUILDING_LAND
+	FARMLAND
+	FOREST_FIELD
+	MISCELLANEOUS
+}
+type PreviousSale {
+	price: Float
+	year: Int
+}
+input PreviousSaleInput{
+	price: Float
+	year: Int
+}
+type Property {
+	apartment: Apartment
+	commercialBuilding: CommercialBuilding
+	createdAt: DateTime!
+	customer: Customer
+	house: House
+	id: ID!
+	numericId: Int
+	plot: Plot
+	propertyCommon: PropertyCommonFields
+	salesforceId: ID
+	state: PropertyStateEnum!
+	type: PropertyType
+	updatedAt: DateTime!
+	version: Int!
+}
+type PropertyCommonFields {
+	address: Address
+	metadata: PropertyMetadata
+	otherInformation: String
+	valuationDrivers: ValuationDrivers
+}
+input PropertyCommonFieldsInput{
+	address: AddressInput
+	metadata: PropertyMetadataInput
+	otherInformation: String
+	valuationDrivers: ValuationDriversInput
+}
+input PropertyInput{
+	apartment: ApartmentInput
+	commercialBuilding: CommercialBuildingInput
+	house: HouseInput
+	plot: PlotInput
+	propertyCommon: PropertyCommonFieldsInput
+	type: PropertyType
+}
+type PropertyMetadata {
+	abTestWidget: String
+	# Broker appointment requested by the property owner inside Owners Loung, and confirmed by Sales Agent
+	# after a call with Owner as well as checking broker availability. It's also saved inside
+	# Salesforce Lead entity as field `broker_booked_appointment__c`
+	brokerAppointmentAt: DateTime
+	customerIntent: CustomerIntentEnum
+	# Stores the reference to the google drive document folder where the files for this property are currently stored.
+	# The location of this folder will change once a SF Lead is converted to an Opportunity.
+	documentDriveFolder: String
+	gclid: String
+	# Sales call appointment (re)scheduled by Owner from Owners Lounge. It is reflected in the Salesforce
+	# Lead entity on field `sales_booked_appointment__c` so that sales agents can see it and accordingly
+	# make a call to Owner.
+	initialSalesCallAt: DateTime
+	reasonForSale: ReasonForSaleEnum
+	referralData: String
+	saleHorizon: SaleHorizonEnum
+	sfStage: SfStageEnum
+	sfmcTrigger: String
+	tpChannel: String
+	tpUrl: String
+	valuations: [ValuationInfo!]
+}
+input PropertyMetadataInput{
+	abTestWidget: String
+	# Broker appointment requested by the property owner inside Owners Loung, and confirmed by Sales Agent
+	# after a call with Owner as well as checking broker availability. It's also saved inside
+	# Salesforce Lead entity as field `broker_booked_appointment__c`
+	brokerAppointmentAt: DateTime
+	customerIntent: CustomerIntentEnum
+	# Stores the reference to the google drive document folder where the files for this property are currently stored.
+	# The location of this folder will change once a SF Lead is converted to an Opportunity.
+	documentDriveFolder: String
+	gclid: String
+	# Sales call appointment (re)scheduled by Owner from Owners Lounge. It is reflected in the Salesforce
+	# Lead entity on field `sales_booked_appointment__c` so that sales agents can see it and accordingly
+	# make a call to Owner.
+	initialSalesCallAt: DateTime
+	reasonForSale: ReasonForSaleEnum
+	referralData: String
+	saleHorizon: SaleHorizonEnum
+	sfStage: SfStageEnum
+	sfmcTrigger: String
+	tpChannel: String
+	tpUrl: String
+}
+enum PropertyStateEnum {
+	LEAD
+	LEAD_CALL_LATER
+	LEAD_CANCELLED
+	OPPORTUNITY_CANCELLED
+	OPPORTUNITY_DRAFT
+	OPPORTUNITY_SUBMITTED
+}
+enum PropertyType {
+	APARTMENT
+	COMMERCIAL_BUILDING
+	HOUSE
+	PLOT
+}
+enum QualityEnum {
+	DIFFICULT_TO_SOLVE
+	EASILY_SOLVABLE
+	NOT_SPECIFIED
+	OLD_REMAINS_OR_CONTAMINATED
+}
+enum ReasonForSaleEnum {
+	AGE_PENSION
+	BENEFICIAL_MARKET_SITUATION
+	FINANCES_TAXES
+	INHERITANCE
+	MOVE
+	OTHER
+	SEPARATION_DIVORCE
+}
+type ResidentialUnitsInfo {
+	bathroomsCount: Int
+	features: MultiHouseFeatures
+	isSingleResidentialSalePossible: Boolean
+	livingAreaSqm: Float
+	maintenanceReservesEuro: Float
+	plotCoOwnershipShare: Float
+	rented: MultiRented
+	roomsCount: Float
+	unitsCount: Int
+}
+input ResidentialUnitsInfoInput{
+	bathroomsCount: Int
+	features: MultiHouseFeaturesInput
+	isSingleResidentialSalePossible: Boolean
+	livingAreaSqm: Float
+	maintenanceReservesEuro: Float
+	plotCoOwnershipShare: Float
+	rented: MultiRentedInput
+	roomsCount: Float
+	unitsCount: Int
+}
+enum RoofSlopeEnum {
+	LIFTED_SLOPE
+	LOW_SLOPE
+	NO_SLOPE
+}
+enum SaleHorizonEnum {
+	LONG_TERM
+	MEDIUM_LONG_TERM
+	MEDIUM_TERM
+	NOT_GOING_TO_SELL
+	SHORT_TERM
+	UNCLEAR
+}
+enum SalutationEnum {
+	DIPL_ING
+	DR
+	MAG
+	PROF
+	PROF_DR
+}
+type SecondRental {
+	additionalInformation: String
+	constructionYear: Int
+	secondRentalType: SecondRentalTypeEnum
+	unitAreaSqm: Float
+	unitCondition: SecondRentalConditionEnum
+}
+enum SecondRentalConditionEnum {
+	GOOD_CONDITION
+	POOR_CONDITION
+	VERY_GOOD_CONDITION
+}
+input SecondRentalInput{
+	additionalInformation: String
+	constructionYear: Int
+	secondRentalType: SecondRentalTypeEnum
+	unitAreaSqm: Float
+	unitCondition: SecondRentalConditionEnum
+}
+enum SecondRentalTypeEnum {
+	LODGER_FLAT
+	OTHER
+	SECOND_HOUSE
+}
+type SemiDetachedHouse {
+	semiDetachedHouseInfo: SemiDetachedHouseInfo
+	singleFamilyHouseInfo: SingleFamilyHouseInfo
+}
+type SemiDetachedHouseInfo {
+	subType: SemiDetachedHouseSubTypeEnum
+	wallPartition: SemiDetachedHouseWallPartitionEnum
+}
+input SemiDetachedHouseInfoInput{
+	subType: SemiDetachedHouseSubTypeEnum
+	wallPartition: SemiDetachedHouseWallPartitionEnum
+}
+input SemiDetachedHouseInput{
+	semiDetachedHouseInfo: SemiDetachedHouseInfoInput
+	singleFamilyHouseInfo: SingleFamilyHouseInfoInput
+}
+enum SemiDetachedHouseSubTypeEnum {
+	MID_TERRACE_HOUSE
+	ROW_CORNER_HOUSE
+	SEMI_DETACHED_HOUSE
+}
+enum SemiDetachedHouseWallPartitionEnum {
+	SOLID
+	WOODEN_BEAMS
+}
+enum SfStageEnum {
+	BACK_TO_SALES
+	BROKERAGE_CONTRACT_SIGNED
+	CALL_APPOINTMENT
+	CLOSED_LOST
+	CONTACT_PROCESS
+	DECISION_PROCESS
+	FOLLOW_UP
+	INTERESTED
+	ONLINE
+	ON_SITE_APPOINTMENT
+	SUCCESSFULLY_MARKETED
+	UPON_CONCLUSION
+	VERBAL_AGREEMENT
+}
+enum ShapeEnum {
+	ANGLED
+	OTHER_FORM
+	RECTANGULAR
+}
+type SingleFamilyHouse {
+	singleFamilyHouseInfo: SingleFamilyHouseInfo
+	subType: SingleFamilyHouseSubTypesEnum
+}
+type SingleFamilyHouseFeatures {
+	balcony: BalconyDetails
+	bathroomFloorMaterial: FeatureBathroomFloorMaterialEnum
+	bathroomQuality: FeatureBathroomQualityEnum
+	brightnessLevel: FeatureBrightnessLevelEnum
+	electricsQuality: FeatureElectricsQualityEnum
+	enclosedStreet: FeatureEnclosedStreetEnum
+	freightElevatorCount: Int @deprecated(reason: "Use hasFreightElevator instead")
+	guestToiletCount: Int
+	hasAirConditioning: Boolean
+	hasAlarmSystem: Boolean
+	hasBathDaylight: Boolean
+	hasBathtub: Boolean
+	hasCableOrSatellite: Boolean
+	hasElectricShutters: Boolean
+	hasEnsuiteBathroom: Boolean
+	hasFirePlace: Boolean
+	hasFloorToCeilingWindows: Boolean
+	hasFreightElevator: Boolean
+	hasFurniture: Boolean
+	hasGuestToilet: Boolean @deprecated(reason: "Use guestToiletCount instead")
+	hasHeatedBathroomFloors: Boolean
+	hasPassengerElevator: Boolean
+	hasSauna: Boolean
+	hasShower: Boolean
+	hasVideoIntercom: Boolean
+	hasWhirlpool: Boolean
+	hasWindowsSunProtection: Boolean
+	interiorQuality: FeatureInteriorQualityEnum
+	isBarrierFree: Boolean
+	isSmartHome: Boolean
+	kitchen: KitchenDetails
+	largestLivingRoomAreaSqm: Float
+	livingroomFloorMaterial: FeatureLivingroomFloorMaterialEnum
+	outsideView: FeatureOutsideViewEnum
+	passengerElevatorCount: Int @deprecated(reason: "Use hasPassengerElevator instead")
+}
+input SingleFamilyHouseFeaturesInput{
+	balcony: BalconyDetailsInput
+	bathroomFloorMaterial: FeatureBathroomFloorMaterialEnum
+	bathroomQuality: FeatureBathroomQualityEnum
+	brightnessLevel: FeatureBrightnessLevelEnum
+	electricsQuality: FeatureElectricsQualityEnum
+	enclosedStreet: FeatureEnclosedStreetEnum
+	freightElevatorCount: Int
+	guestToiletCount: Int
+	hasAirConditioning: Boolean
+	hasAlarmSystem: Boolean
+	hasBathDaylight: Boolean
+	hasBathtub: Boolean
+	hasCableOrSatellite: Boolean
+	hasElectricShutters: Boolean
+	hasEnsuiteBathroom: Boolean
+	hasFirePlace: Boolean
+	hasFloorToCeilingWindows: Boolean
+	hasFreightElevator: Boolean
+	hasFurniture: Boolean
+	hasGuestToilet: Boolean
+	hasHeatedBathroomFloors: Boolean
+	hasPassengerElevator: Boolean
+	hasSauna: Boolean
+	hasShower: Boolean
+	hasVideoIntercom: Boolean
+	hasWhirlpool: Boolean
+	hasWindowsSunProtection: Boolean
+	interiorQuality: FeatureInteriorQualityEnum
+	isBarrierFree: Boolean
+	isSmartHome: Boolean
+	kitchen: KitchenDetailsInput
+	largestLivingRoomAreaSqm: Float
+	livingroomFloorMaterial: FeatureLivingroomFloorMaterialEnum
+	outsideView: FeatureOutsideViewEnum
+	passengerElevatorCount: Int
+}
+type SingleFamilyHouseInfo {
+	basePastRentEuro: Float
+	bathroomsCount: Int
+	bedroomsCount: Int
+	features: SingleFamilyHouseFeatures
+	investmentDetails: HouseInvestmentDetails
+	isHolidayHouse: Boolean
+	livingAreaSqm: Float
+	roomsCount: Float
+	storageRoomsCount: Int
+}
+input SingleFamilyHouseInfoInput{
+	basePastRentEuro: Float
+	bathroomsCount: Int
+	bedroomsCount: Int
+	features: SingleFamilyHouseFeaturesInput
+	investmentDetails: HouseInvestmentDetailsInput
+	isHolidayHouse: Boolean
+	livingAreaSqm: Float
+	roomsCount: Float
+	storageRoomsCount: Int
+}
+input SingleFamilyHouseInput{
+	singleFamilyHouseInfo: SingleFamilyHouseInfoInput
+	subType: SingleFamilyHouseSubTypesEnum
+}
+enum SingleFamilyHouseSubTypesEnum {
+	BUNGALOW
+	DETACHED_HOUSE_FOR_ONE_FAMILY
+	VILLA
+}
+enum SlopeEnum {
+	MEDIUM_GRADIENT
+	NOT_SPECIFIED
+	NO_GRADIENT
+	SLIGHT_SLOPE
+	STRONG_GRADIENT
+	VERY_STEEP_GRADIENT
+}
+type SpecialHouse {
+	singleFamilyHouseInfo: SingleFamilyHouseInfo
+	specialHouseInfo: SpecialHouseInfo
+}
+type SpecialHouseInfo {
+	specialPropertyInformation: String
+}
+input SpecialHouseInfoInput{
+	specialPropertyInformation: String
+}
+input SpecialHouseInput{
+	singleFamilyHouseInfo: SingleFamilyHouseInfoInput
+	specialHouseInfo: SpecialHouseInfoInput
+}
+input SubmitPropertyInput{
+	id: ID!
+}
+union SubmitPropertyPayload = SubmitPropertySuccess
+type SubmitPropertySuccess {
+	property: Property!
+}
+type TwoOrThreeFamilyHouse {
+	features: TwoOrThreeFamilyHouseFeatures
+	house1: TwoOrThreeFamilyHousePart
+	house2: TwoOrThreeFamilyHousePart
+	house3: TwoOrThreeFamilyHousePart
+	maintenanceReservesEuro: Float
+	ownerAge: Int
+	soldWithLifeAnnuity: TwoOrThreeFamilyHouseAnnuityEnum
+}
+enum TwoOrThreeFamilyHouseAnnuityEnum {
+	NO
+	YES_FOR_APARTMENT_1
+	YES_FOR_APARTMENT_2
+	YES_FOR_APARTMENT_3
+	YES_FOR_SEVERAL_APARTMENTS
+}
+enum TwoOrThreeFamilyHouseConditionEnum {
+	MINT_CONDITION
+	NEEDS_RENOVATION
+	WELL_KEPT
+}
+type TwoOrThreeFamilyHouseFeatures {
+	brightnessLevel: FeatureBrightnessLevelEnum
+	electricsQuality: FeatureElectricsQualityEnum
+	enclosedStreet: FeatureEnclosedStreetEnum
+	freightElevatorCount: Int @deprecated(reason: "Use hasFreightElevator instead")
+	hasAirConditioning: Boolean
+	hasAlarmSystem: Boolean
+	hasBikeStorageRoom: Boolean
+	hasCableOrSatellite: Boolean
+	hasElectricShutters: Boolean
+	hasEnsuiteBathroom: Boolean
+	hasFirePlace: Boolean
+	hasFloorToCeilingWindows: Boolean
+	hasFreightElevator: Boolean
+	hasFurniture: Boolean
+	hasPassengerElevator: Boolean
+	hasSauna: Boolean
+	hasSharedLaundryRoom: Boolean
+	hasVideoIntercom: Boolean
+	hasWhirlpool: Boolean
+	hasWindowsSunProtection: Boolean
+	isBarrierFree: Boolean
+	isSingleResidentialSalePossible: Boolean
+	isSmartHome: Boolean
+	largestLivingRoomAreaSqm: Float
+	outsideView: FeatureOutsideViewEnum
+	passengerElevatorCount: Int @deprecated(reason: "Use hasPassengerElevator instead")
+}
+input TwoOrThreeFamilyHouseFeaturesInput{
+	brightnessLevel: FeatureBrightnessLevelEnum
+	electricsQuality: FeatureElectricsQualityEnum
+	enclosedStreet: FeatureEnclosedStreetEnum
+	freightElevatorCount: Int
+	hasAirConditioning: Boolean
+	hasAlarmSystem: Boolean
+	hasBikeStorageRoom: Boolean
+	hasCableOrSatellite: Boolean
+	hasElectricShutters: Boolean
+	hasEnsuiteBathroom: Boolean
+	hasFirePlace: Boolean
+	hasFloorToCeilingWindows: Boolean
+	hasFreightElevator: Boolean
+	hasFurniture: Boolean
+	hasPassengerElevator: Boolean
+	hasSauna: Boolean
+	hasSharedLaundryRoom: Boolean
+	hasVideoIntercom: Boolean
+	hasWhirlpool: Boolean
+	hasWindowsSunProtection: Boolean
+	isBarrierFree: Boolean
+	isSingleResidentialSalePossible: Boolean
+	isSmartHome: Boolean
+	largestLivingRoomAreaSqm: Float
+	outsideView: FeatureOutsideViewEnum
+	passengerElevatorCount: Int
+}
+enum TwoOrThreeFamilyHouseFloorLevelEnum {
+	ATTIC
+	BASEMENT
+	FLOOR_1
+	FLOOR_2
+	FLOOR_3
+	GROUND_FLOOR
+	MEZZANINE_FLOOR
+}
+input TwoOrThreeFamilyHouseInput{
+	features: TwoOrThreeFamilyHouseFeaturesInput
+	house1: TwoOrThreeFamilyHousePartInput
+	house2: TwoOrThreeFamilyHousePartInput
+	house3: TwoOrThreeFamilyHousePartInput
+	maintenanceReservesEuro: Float
+	ownerAge: Int
+	soldWithLifeAnnuity: TwoOrThreeFamilyHouseAnnuityEnum
+}
+enum TwoOrThreeFamilyHouseInteriorQualityEnum {
+	AVERAGE
+	HIGH_QUALITY
+	LUXURY
+	SIMPLE
+}
+type TwoOrThreeFamilyHouseInvestmentDetails {
+	ownerAge: Int
+	soldWithLifeAnnuity: Boolean
+}
+input TwoOrThreeFamilyHouseInvestmentDetailsInput{
+	ownerAge: Int
+	soldWithLifeAnnuity: Boolean
+}
+type TwoOrThreeFamilyHousePart {
+	baseCurrentRentEuro: Float
+	bathroomsCount: Int
+	condition: TwoOrThreeFamilyHouseConditionEnum
+	floorLevel: TwoOrThreeFamilyHouseFloorLevelEnum
+	hasBalcony: Boolean
+	hasBuiltinKitchen: Boolean
+	interiorQuality: TwoOrThreeFamilyHouseInteriorQualityEnum
+	investmentDetails: TwoOrThreeFamilyHouseInvestmentDetails
+	isIdenticalToPreviousHouse: Boolean
+	isRented: Boolean
+	livingAreaSqm: Float
+	rentalPeriodYears: Int
+	roomsCount: Float
+	storageRoomsCount: Int
+	subType: TwoOrThreeFamilyHouseSubTypeEnum
+}
+input TwoOrThreeFamilyHousePartInput{
+	baseCurrentRentEuro: Float
+	bathroomsCount: Int
+	condition: TwoOrThreeFamilyHouseConditionEnum
+	floorLevel: TwoOrThreeFamilyHouseFloorLevelEnum
+	hasBalcony: Boolean
+	hasBuiltinKitchen: Boolean
+	interiorQuality: TwoOrThreeFamilyHouseInteriorQualityEnum
+	investmentDetails: TwoOrThreeFamilyHouseInvestmentDetailsInput
+	isIdenticalToPreviousHouse: Boolean
+	isRented: Boolean
+	livingAreaSqm: Float
+	rentalPeriodYears: Int
+	roomsCount: Float
+	storageRoomsCount: Int
+	subType: TwoOrThreeFamilyHouseSubTypeEnum
+}
+enum TwoOrThreeFamilyHouseSubTypeEnum {
+	APARTMENT
+	LOFT_STUDIO
+	MAISONETTE
+	SEMI_DETACHED_HOUSE_BY_SOLID_WALL
+	SEMI_DETACHED_HOUSE_BY_WOODEN_BEAMS
+}
+input UpdatePropertyInput{
+	id: ID!
+	property: PropertyInput!
+}
+union UpdatePropertyPayload = UpdatePropertySuccess
+type UpdatePropertySuccess {
+	property: Property!
+}
+type ValuationDrivers {
+	brokerEmail: String @deprecated(reason: "Use broker.Email instead")
+	indicativeValue: Float
+	otherInformation: String
+	otherValueFactors: String
+	ownerIndicativeValue: Float
+	previousSale: PreviousSale
+}
+input ValuationDriversInput{
+	brokerEmail: String
+	indicativeValue: Float
+	otherInformation: String
+	otherValueFactors: String
+	ownerIndicativeValue: Float
+	previousSale: PreviousSaleInput
+}
+type ValuationInfo {
+	createdAt: DateTime!
+	type: ValuationTypeEnum
+	valueMaxEur: Float
+	valueMinEur: Float
+}
+enum ValuationTypeEnum {
+	SHORT
+}
+type TimeSpan {
+	from: DateTime!
+	to: DateTime!
+}
+input TimeSpanInput{
+	from: DateTime!
+	to: DateTime!
+}
+input ApplicationFilter{
+	termsAndConditionsConfirmed: Boolean
+	advertisementId: String
+}
+type Application {
+	id: ID!
+	userId: ID!
+	email: String
+	phone: String
+	firstName: String
+	lastName: String
+	termsAndConditionsConfirmed: Boolean
+}
+input CreateApplicationInput{
+	advertisementId: ID!
+	email: String!
+	publisher: String!
+	gender: Gender!
+	firstName: String
+	lastName: String
+	phone: String
+}
+type CreateApplicationPayload {
+	applicationId: ID!
+}
+enum Gender {
+	FEMALE
+	MALE
+	OTHER
+}
+type Usage {
+	id: ID!
+	createdAt: DateTime
+	type: UsageType
+	opportunityId: String
+	brokerEmail: String
+}
+enum UsageType {
+	# Broker prep page opened
+	BPP_LOADED
+	# TOOL_MCM_TRANSACTIONS
+	MCM_TRANSACTIONS
+	# TOOL_MARKET_OVERVIEW
+	MARKET_OVERVIEW
+	# TOOL_HISTORICAL_COMPARABLES
+	HISTORICAL_COMPARABLES
+	# TOOL_USEFUL_LINKS
+	USEFUL_LINKS
+	# TOOL_MC_COMPASS
+	MC_COMPASS
+	# TOOL_CITY_DESCRIPTION
+	CITY_DESCRIPTION
+	# TOOL_POINT_OF_INTERESTS
+	POINT_OF_INTERESTS
+}
+input SaveUsageInput{
+	type: UsageType!
+	opportunityId: String
+	brokerEmail: String
+}
+type SaveUsageResponse {
+	id: ID
+}
+input SubmitViewReportRequest{
+	applicationId: String!
+	appointmentId: String!
+	action: ReportAction!
+	report: Report
+}
+type SubmitViewReportResponse {
+	applicationState: ApplicationState!
+}
+input Report{
+	opportunityId: String!
+	interestedMcFinance: Boolean!
+	interestedProperty: Boolean
+	comment: String
+}
+input UpdateApplicationRequest{
+	id: String!
+	# The new state of the application. Allowed values are:
+	# - PropertyInterested
+	# - PropertyNotInterested
+	state: ApplicationState!
+}
+type UpdateApplicationResponse {
+	applicationState: ApplicationState!
+}
+input SubmitOfferRequest{
+	applicationId: String!
+	action: OfferAction!
+	comment: String
+}
+type SubmitOfferResponse {
+	applicationState: ApplicationState!
+}
+enum ReportAction {
+	VIEWED
+	ABSENT
+	CANCEL
+}
+enum OfferAction {
+	ACCEPT
+	REJECT
+	VALIDATE_DOCS
+	REQUEST_DOCS
+}
+input CreateEventInput{
+	type: EventType!
+	appointmentType: AppointmentType!
+	recordId: ID
+	time: TimeSpanInput
+	occurrences: [OccurrenceInput!]
+	subject: String
+	description: String
+	location: String
+	internalComment: String
+	externalComment: String
+	applicationIds: [ID!]
+	attendees: [AttendeeInput!]
+	recurrence: Recurrence
+	color: EventColor
+}
+input AttendeeInput{
+	email: String!
+}
+type CreateEventPayload {
+	events: [EventPayload!]!
+}
+type EventPayload {
+	id: ID!
+	appointmentId: ID @deprecated(reason: "will be removed in following releases")
+	status: EventStatus!
+}
+input OccurrenceInput{
+	time: TimeSpanInput!
+	maxInvitations: Int!
+}
+enum Recurrence {
+	ONCE
+	EVERY_DAY
+	EVERY_WEEK
+	EVERY_2_WEEKS
+	EVERY_3_WEEKS
+	EVERY_4_WEEKS
+}
+enum AppointmentType {
+	# Telefontermin
+	CALL
+	# Vor-Ort-Termin
+	ON_SITE
+	# Virtual
+	VIRTUAL
+}
+enum EventType {
+	# Pre-Call
+	PRE_CALL
+	# Ersttermin
+	FIRST_APPOINTMENT
+	# Einwertung
+	VALUATION
+	# Folgetermin
+	FOLLOWING_APPOINTMENT
+	# Besprechung Bewertung
+	SECOND_APPOINTMENT
+	# Kundenpflege
+	CUSTOMER_CARE
+	# Objektaufnahme
+	OBJECT_ADMISSION
+	# Unterlagen
+	DOCUMENTS
+	# Exposé
+	EXPOSE
+	OPEN_VIEWING_SLOTS
+	# Besichtigung
+	VIEWING_APPOINTMENT
+	# Kaufverhandlungen
+	CUSTOMER_NEGOTIATIONS
+	# Price Negotiations
+	PRICE_NEGOTIATIONS
+	# Notary Pre-Call
+	NOTARY_PRE_CALL
+	# Notartermin
+	NOTARY_APPOINTMENT
+	# Keys Handling
+	KEYS_HANDLING
+	# Object handover
+	OBJECT_HANDOVER
+	# Meeting - JF
+	MEETING
+	# Privat
+	PRIVATE
+	# Sonnstiges
+	OTHER
+	TRAVEL
+	CHECK
+	CALL
+}
+enum EventStatus {
+	# Abgesagt
+	CANCELLED
+	# Erstellt
+	CREATED
+	# Verschoben
+	CLOSED
+	# Vorbereitet
+	PREPARED
+}
+enum EventColor {
+	BLUE_GREEN
+	BLUE_POP
+	BLUE_WATER
+	RED_TOMATO
+	RED_ROSES
+	ORANGE_PULP
+	ORANGE_SUN
+	GREEN_FOREST
+	GREEN_LAKE
+	PINK_LILLI
+	PURPLE_RAIN
+	GREY_50
+}
+enum Country {
+	AT
+	DE
+	FR
+}
+enum Position {
+	UNSPECIFIED
+	# Handelsvertreter
+	COMMERCIAL_AGENT
+	# Makler
+	BROKER
+	# McEinkauf
+	MC_PURCHASING
+	# McVerkauf
+	MC_SALE
+	# Festangestellt
+	PERMANENTLY_EMPLOYED
+	# Praktikant
+	TRAINEE
+	# Werkstudent
+	WORKING_STUDENT
+	# Aushilfe
+	TEMPORARY
+	# Telesales
+	TELESALES
+	# Sr. Makler
+	SENIOR_BROKER
+	# Teamlead Makler
+	TEAM_LEAD_BROKER
+	# Commercial
+	COMMERCIAL
+	# CEO
+	CEO
+	# Angestellter
+	EMPLOYEE
+	# Junior Teamlead Telesales
+	JUNIOR_TEAMLEAD_TELESALES
+	# Teamlead Telesales
+	TEAMLEAD_TELESALES
+	# Broker Operations Lead
+	BROKER_OPERATIONS_LEAD
+	# Teamlead
+	TEAM_LEAD
+	# Vertriebsleiter
+	SALES_MANAGER
+	# Studitemps Werkstudent
+	STUDY_TEMPORARY_WORKING_STUDENT
+}
+enum SalesforceTag {
+	COMMERCIAL
+	MPH
+}
+enum TimeslotState {
+	CREATED
+	CANCELLED
+	CLOSED
+}
+enum AppointmentState {
+	DRAFT
+	CREATED
+	INVITED
+	ACCEPTED
+	VIEWED
+	CLOSED
+	MISSED
+	CANCELLED
+	DECLINED
+}
+enum SortOrder {
+	ASC
+	DESC
+}
+enum InvitationState {
+	DRAFT
+	CREATED
+	INVITED
+	ACCEPTED
+	VIEWED
+	CLOSED
+	MISSED
+	CANCELLED
+	DECLINED
+}
+enum ApplicationState {
+	Unspecified
+	Created
+	AppointmentSet
+	AppointmentCoordination
+	PropertyViewed
+	PropertyInterested
+	PropertyNotInterested
+	OfferSubmitted
+	OfferAccepted
+	NotaryDateSet
+	Declined
+	Completed
+}
+interface IEvent {
+	id: ID!
+	broker: Broker!
+	time: TimeSpan!
+	type: EventType
+	status: EventStatus
+	appointmentType: AppointmentType
+	subject: String
+	location: String
+	description: String
+	color: EventColor
+}
+input EventFilter{
+	startTime: DateTime
+	endTime: DateTime
+	brokerEmails: [Email!]
+	id: [String!]
+}
+input EventSort{
+	startTime: SortOrder
+}
+type Broker {
+	id: ID!
+	email: Email!
+	firstName: String
+	lastName: String
+	gender: Gender
+	officeAddress: BrokerAddress
+	homeAddress: BrokerAddress
+	isActive: Boolean
+	position: Position
+}
+scalar Email
+scalar URL
+type BrokerAddress {
+	street: String
+	city: String
+	postalCode: String!
+	country: Country!
+	fullAddress: String!
+	phone: String
+}
+interface IEventProperty {
+	location: RawLocation
+}
+type SalesforceEvent {
+	id: ID!
+	broker: Broker!
+	time: TimeSpan!
+	type: EventType
+	status: EventStatus
+	appointmentType: AppointmentType
+	subject: String
+	location: String
+	description: String
+	color: EventColor
+	property: SalesforceEventProperty!
+	leadId: String
+	opportunityId: String
+	beforeEvent: SalesforceEvent
+	afterEvent: SalesforceEvent
+	participants: [SalesforceParticipant]!
+	tags: [SalesforceTag!]
+	needPreparation: Boolean
+}
+type ImmoforceEvent {
+	id: ID!
+	broker: Broker!
+	time: TimeSpan!
+	type: EventType
+	status: EventStatus
+	appointmentType: AppointmentType
+	subject: String
+	location: String
+	description: String
+	color: EventColor
+	property: ImmoforceEventProperty!
+	opportunityId: String
+	advertisementId: String!
+	maxApplicants: Int!
+	applicants: [User!]!
+	appointments: [Appointment]!
+	internalComment: String
+	externalComment: String
+	needPreparation: Boolean
+}
+type BrokerforceEvent {
+	id: ID!
+	broker: Broker!
+	time: TimeSpan!
+	property: BrokerforceEventProperty!
+	type: EventType
+	status: EventStatus
+	appointmentType: AppointmentType
+	subject: String
+	location: String
+	description: String
+	color: EventColor
+	participants: [Participant!]
+}
+type Participant {
+	id: ID!
+	email: Email!
+	name: String!
+	phone: String
+}
+type BrokerforceEventProperty {
+	owner: BrokerforceEventOwner
+	location: RawLocation
+}
+type BrokerforceEventOwner {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	email: Email!
+	gender: Gender
+}
+type SalesforceEventProperty {
+	location: RawLocation
+	owner: SalesforceAccount
+	brokerEventId: String
+}
+union SalesforceParticipant = SalesforceContact | SalesforceUser
+type SalesforceAccount {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	email: Email!
+	phone: String
+}
+type SalesforceContact {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	email: Email!
+	phone: String
+	mobilePhone: String
+}
+type SalesforceUser {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	email: Email!
+	phone: String
+	mobilePhone: String
+}
+type RawLocation {
+	house: String
+	street: String
+	city: String
+	postalCode: String!
+	country: Country!
+	fullAddress: String!
+}
+type User {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	gender: Gender
+	email: Email!
+	phone: String
+	photo: URL
+	applicationId: String
+	applicationState: ApplicationState
+	needReport: Boolean
+	invitationId: String
+}
+type ImmoforceEventProperty {
+	location: RawLocation
+	owner: Contact
+	brokerEventId: String
+}
+type Contact {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	gender: Gender
+	email: Email!
+	phone: String
+	salutationOriginal: String
+}
+type TimeSlot {
+	id: ID!
+	time: TimeSpan!
+	state: TimeslotState!
+	appointmentType: AppointmentType
+	advertisement: Advertisement!
+	appointments: [Appointment]!
+	applications: [Application]!
+	maxApplicants: Int!
+}
+type Appointment {
+	id: ID!
+	token: String!
+	state: AppointmentState!
+	timeSlot: TimeSlot!
+	user: User!
+	advertisement: Advertisement!
+	application: Application
+}
+input RescheduleEventRequest{
+	id: String!
+	type: EventType!
+	start: DateTime!
+	end: DateTime!
+	immoforce: RescheduleImmoforceEventRequest
+}
+input RescheduleImmoforceEventRequest{
+	invitationID: String!
+}
+type EventID {
+	id: String!
+}
+type RescheduleEventResponse {
+	event: EventID!
+}
+input UpdateEventInput{
+	id: ID!
+	type: EventType!
+	time: TimeSpanInput
+	status: EventStatus
+	appointmentType: AppointmentType
+	color: EventColor
+	internalComment: String
+	externalComment: String
+	maxInvitations: Int
+	addedApplicationIds: [ID!]
+	deletedApplicationIds: [ID!]
+	subject: String
+	description: String
+	location: String
+	attendees: [AttendeeInput!]
+	recurrence: Recurrence
+	beforeEventId: String
+	afterEventId: String
+}
+type UpdateEventPayload {
+	event: Event!
+}
+type Event {
+	id: ID!
+	time: TimeSpan
+	type: EventType
+	status: EventStatus
+	appointmentType: AppointmentType
+	color: EventColor
+	internalComment: String
+	externalComment: String
+	maxInvitations: Int
+	invitations: [Invitation!]
+	subject: String
+	description: String
+	location: String
+	attendees: [AttendeeDetails!]
+}
+type AttendeeDetails {
+	email: String!
+}
+type Invitation {
+	applicationId: ID!
+	status: InvitationState
+}
+input PbPagination{
+	page: Int!
+	pageSize: Int!
+	order: PbOrder!
+	orderBy: PbOrderBy!
+}
+type PbAddress {
+	postalCode: String!
+	country: PbCountry!
+	city: String!
+	street: String!
+	fullName: String!
+}
+type PbUser {
+	id: ID!
+	email: Email!
+	salutation: Salutation!
+	firstName: String!
+	lastName: String!
+	phone: String!
+}
+enum PbCountry {
+	Germany
+	Austria
+	France
+}
+enum Salutation {
+	None
+	Herr
+	Frau
+}
+enum PbOrder {
+	Asc
+	Desc
+}
+enum PbOrderBy {
+	Default
+	State
+	Created
+	Updated
+}
+input PbApplicationFilter{
+	id: [String!]
+	advertisementId: [String!]
+	state: [PbApplicationState!]
+	updatedFrom: DateTime
+	updatedTo: DateTime
+	search: String
+}
+type GetApplicationsResponse {
+	applications: [PbApplication!]!
+	totalCount: Int!
+}
+type PbApplication {
+	id: ID!
+	appointmentId: String!
+	opportunityId: String!
+	advertisementId: String!
+	advertisementShortId: Int!
+	state: PbApplicationState!
+	brokerId: String!
+	applicant: PbUser!
+	realEstate: PbRealEstate!
+	offer: PbOffer
+	needReport: Boolean!
+	created: DateTime!
+	updated: DateTime!
+}
+type PbRealEstate {
+	type: PbRealEstateType!
+	address: PbAddress!
+	imageUrl: String!
+}
+type PbOffer {
+	id: String!
+	type: PbOfferType!
+	value: String!
+	notes: String!
+	documentsState: PbOfferDocumentsState!
+	documents: [PbDocument!]
+	createdBy: PbOfferCreatorType!
+	needQualify: Boolean!
+	submitted: DateTime!
+	created: DateTime!
+	updated: DateTime!
+}
+type PbDocument {
+	id: String!
+	name: String!
+	sizeBytes: Int!
+	googleFileId: String!
+	url: String!
+	created: DateTime!
+	submitted: DateTime
+}
+enum PbApplicationState {
+	Unspecified
+	Created
+	AppointmentSet
+	AppointmentCoordination
+	PropertyViewed
+	PropertyInterested
+	PropertyNotInterested
+	OfferSubmitted
+	OfferAccepted
+	NotaryDateSet
+	Declined
+	Completed
+}
+enum PbRealEstateType {
+	Unspecified
+	Site
+	Apartment
+	House
+	Parking
+	Investment
+	Commercial
+}
+enum PbOfferCreatorType {
+	Buyer
+	Broker
+}
+enum PbOfferType {
+	Unspecified
+	Firm
+	Indicative
+}
+enum PbOfferDocumentsState {
+	Unspecified
+	Draft
+	NotSubmitted
+	Submitted
+	Requested
+	Approved
+}
+type GetNotificationsResponse {
+	summary: [PbNotificationSummary!]!
+}
+type PbNotificationSummary {
+	item: PbMenuItem!
+	count: Int!
+}
+enum PbMenuItem {
+	Applications
+}
+input BrePagination{
+	page: Int!
+	pageSize: Int!
+	order: BreOrder
+	orderBy: BreOrderBy
+}
+type BreUser {
+	id: String!
+	email: String!
+	salutation: BreSalutation!
+	firstName: String!
+	lastName: String!
+	phone: String!
+}
+type Attachment {
+	id: String!
+	title: String!
+	url: String!
+	contentType: String!
+	createdAt: DateTime!
+}
+type Advertisement {
+	id: ID!
+	additionalId: Int!
+	title: String!
+	status: AdvertisementStatus
+	address: AdvertisementAddress
+	objectType: RealEstateType
+	livingSpaceArea: Float
+	plotArea: Float
+	totalFloorArea: Float
+	sellPrice: Float
+	termsAndConditionsRequired: Boolean
+	ownerId: String
+}
+type AdvertisementAddress {
+	street: String
+	number: String
+	postalCode: String
+	city: String
+	country: String
+	fullAddress: String
+	location: AdvertisementAddressLocation
+}
+type AdvertisementAddressLocation {
+	type: String
+	coordinates: [Float!]
+}
+enum RealEstateState {
+	Lead
+	LeadCancelled
+	LeadCallLater
+	OpportunityDraft
+	OpportunityCancelled
+	OpportunitySubmitted
+	Unknown
+}
+enum RealEstateType {
+	SINGLE_FAMILY_HOUSE
+	APARTMENT
+	MULTI_FAMILY_HOUSE
+	CASTLE_MANOR_HOUSE
+	BUNGALOW
+	FARMHOUSE
+	MID_TERRACE_HOUSE
+	END_TERRACE_HOUSE
+	SEMIDETACHED_HOUSE
+	VILLA
+	PREFABRICATED_BUILDING
+	TOWNHOUSE
+	ROOF_STOREY
+	MAISONETTE
+	LOFT
+	PENTHOUSE
+	TERRACED_FLAT
+	GROUND_FLOOR
+	HALF_BASEMENT
+	HOLIDAY_APARTMENT
+	ETAGE
+	SITE
+	STORE
+	OFFICE
+	GASTRONOMY
+	TRADE_SITE
+	SPECIAL_PURPOSE
+	INDUSTRY
+	CARPORT
+	DUPLEX
+	OUTDOOR
+	OUTSIDE
+	GARAGE
+	CAR_PARK
+	UNDERGROUND_GARAGE
+	COMMERCIAL_BUILDING
+	INDUSTRIAL_PROPERTY
+	LIVING_BUSINESS_HOUSE
+	HOUSING_ESTATE
+	OTHER
+	UNSPECIFIED
+}
+enum AdvertisementState {
+	Draft
+	BrokerReview
+	Closed
+	Created
+	FailedPublish
+	FailedUnpublish
+	Offline
+	Online
+	PendingPublish
+	PendingRepublish
+	PendingUnpublish
+	PendingUpdate
+	Pending
+	Reviewed
+	SellNegotiations
+	SellerReview
+	SuccessfullyMarketed
+	SwatReviewInProgress
+	SwatReview
+	Unknown
+}
+enum OpportunityStage {
+	Interested
+	CallAppointment
+	OnSiteAppointment
+	ContactProcess
+	DecisionProcess
+	VerbalAgreement
+	BrokerageContractSigned
+	Online
+	UponConclusion
+	Unspecified
+}
+enum BreCountry {
+	Germany
+	Austria
+	France
+}
+enum BreSalutation {
+	None
+	Mr
+	Mrs
+}
+enum BreOrder {
+	Asc
+	Desc
+}
+enum BreOrderBy {
+	Default
+	Created
+	Updated
+}
+enum AdvertisementStatus {
+	DRAFT
+	CREATED
+	SWAT_REVIEW
+	BROKER_REVIEW
+	SELLER_REVIEW
+	ONLINE
+	SELL_NEGOTIATIONS
+	OFFLINE
+	SUCCESSFULLY_MARKETED
+	CLOSED
+	SWAT_REVIEW_IN_PROGRESS
+}
+input BrokerRealEstatesFilter{
+	propertySalesforceId: [String!]
+	opportunityStage: [OpportunityStage!]!
+	createdFrom: DateTime
+	createdTo: DateTime
+	search: String
+}
+type GetBrokerRealEstatesResponse {
+	realEstates: [BrokerRealEstate!]!
+	totalCount: Int!
+}
+type BrokerRealEstate {
+	id: String!
+	salesforceId: String!
+	customer: BreUser
+	address: AdvertisementAddress!
+	state: RealEstateState!
+	opportunityStage: OpportunityStage!
+	advertisements: [Advertisement!]!
+	attachments: [Attachment!]!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+}
+scalar Duration
+input TimeslotFilter{
+	email: String
+	startTime: DateTime!
+	endTime: DateTime!
+	recordId: String!
+	appointmentType: STAppointmentType!
+}
+input BookEventRequest{
+	# Broker email
+	email: String!
+	type: STAppointmentType!
+	startTime: DateTime!
+	# recordId specifies the salesforce id of property that the event is being booked for
+	recordId: String!
+}
+input CancelEventRequest{
+	eventId: String!
+	# Broker email
+	email: String!
+}
+type GetTimeslotsResponse {
+	slots: [Timeslot!]!
+	optimal: Int!
+	total: Int!
+}
+type BookEventResponse {
+	eventId: String!
+	beforeEventId: String!
+	afterEventId: String!
+}
+type CancelEventResponse {
+	eventId: String!
+}
+type Timeslot {
+	broker: STBroker!
+	event: STEvent!
+	beforeEvent: STEvent
+	afterEvent: STEvent
+	optimal: Boolean!
+	travelTimeIncrease: Duration
+}
+type STBroker {
+	id: String!
+	type: STBrokerType!
+	email: String!
+	name: String!
+	isTelesales: Boolean!
+	isBest: Boolean!
+	alaRating: Float!
+	rank: Int!
+}
+type STEvent {
+	type: STEventType!
+	start: DateTime!
+	end: DateTime!
+	duration: Duration!
+}
+enum STAppointmentType {
+	OnSite
+	Call
+	Virtual
+}
+enum STBrokerType {
+	Phone
+	OnSite
+	All
+}
+enum STEventType {
+	Call
+	Travel
+	CallPreparation
+	CallWrapUp
+	PreCall
+	FirstAppointment
+	Other
+}
+type __Schema {
+	description: String
+	# A list of all types supported by this server.
+	types: [__Type!]!
+	# The type that query operations will be rooted at.
+	queryType: __Type!
+	# If this server supports mutation, the type that mutation operations will be rooted at.
+	mutationType: __Type
+	# If this server support subscription, the type that subscription operations will be rooted at.
+	subscriptionType: __Type
+	# A list of all directives supported by this server.
+	directives: [__Directive!]!
+}
+type __Type {
+	kind: __TypeKind!
+	name: String
+	description: String
+	specifiedByUrl: String
+	fields(includeDeprecated: Boolean = false): [__Field!]
+	interfaces: [__Type!]
+	possibleTypes: [__Type!]
+	enumValues(includeDeprecated: Boolean = false): [__EnumValue!]
+	inputFields(includeDeprecated: Boolean = false): [__InputValue!]
+	ofType: __Type
+}
+enum __TypeKind {
+	# Indicates this type is a scalar.
+	SCALAR
+	# Indicates this type is an object. `fields` and `interfaces` are valid fields.
+	OBJECT
+	# Indicates this type is an interface. `fields`, `interfaces`, and `possibleTypes` are valid fields.
+	INTERFACE
+	# Indicates this type is a union. `possibleTypes` is a valid field.
+	UNION
+	# Indicates this type is an enum. `enumValues` is a valid field.
+	ENUM
+	# Indicates this type is an input object. `inputFields` is a valid field.
+	INPUT_OBJECT
+	# Indicates this type is a list. `ofType` is a valid field.
+	LIST
+	# Indicates this type is a non-null. `ofType` is a valid field.
+	NON_NULL
+}
+type __Field {
+	name: String!
+	description: String
+	args(includeDeprecated: Boolean = false): [__InputValue!]!
+	type: __Type!
+	isDeprecated: Boolean!
+	deprecationReason: String
+}
+type __InputValue {
+	name: String!
+	description: String
+	type: __Type!
+	# A GraphQL-formatted string representing the default value for this input value.
+	defaultValue: String
+	isDeprecated: Boolean!
+	deprecationReason: String
+}
+type __EnumValue {
+	name: String!
+	description: String
+	isDeprecated: Boolean!
+	deprecationReason: String
+}
+type __Directive {
+	name: String!
+	description: String
+	isRepeatable: Boolean!
+	locations: [__DirectiveLocation!]!
+	args(includeDeprecated: Boolean = false): [__InputValue!]!
+}
+enum __DirectiveLocation {
+	# Location adjacent to a query operation.
+	QUERY
+	# Location adjacent to a mutation operation.
+	MUTATION
+	# Location adjacent to a subscription operation.
+	SUBSCRIPTION
+	# Location adjacent to a field.
+	FIELD
+	# Location adjacent to a fragment definition.
+	FRAGMENT_DEFINITION
+	# Location adjacent to a fragment spread.
+	FRAGMENT_SPREAD
+	# Location adjacent to an inline fragment.
+	INLINE_FRAGMENT
+	# Location adjacent to a variable definition.
+	VARIABLE_DEFINITION
+	# Location adjacent to a schema definition.
+	SCHEMA
+	# Location adjacent to a scalar definition.
+	SCALAR
+	# Location adjacent to an object type definition.
+	OBJECT
+	# Location adjacent to a field definition.
+	FIELD_DEFINITION
+	# Location adjacent to an argument definition.
+	ARGUMENT_DEFINITION
+	# Location adjacent to an interface definition.
+	INTERFACE
+	# Location adjacent to a union definition.
+	UNION
+	# Location adjacent to an enum definition.
+	ENUM
+	# Location adjacent to an enum value definition.
+	ENUM_VALUE
+	# Location adjacent to an input object type definition.
+	INPUT_OBJECT
+	# Location adjacent to an input object field definition.
+	INPUT_FIELD_DEFINITION
+}

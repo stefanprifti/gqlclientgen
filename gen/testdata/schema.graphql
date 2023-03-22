@@ -1,0 +1,55 @@
+input CalculateListRequest {
+  pairs: [LocationPair!]!
+  roundOff: Boolean!
+}
+type CalculateListResponse {
+  travelTimeMinutes: [Int!]!
+  test: Test
+}
+input CalculateRequest {
+  source: Location! # The source location
+  destination: Location!
+  roundOff: Boolean!
+}
+
+type Test {
+  a: Int!
+  b: Int!
+}
+
+type CalculateResponse {
+  travelTimeMinutes: Int!
+}
+# The Country enum type represents a country.
+enum Country {
+  Germany
+  France
+  Austria
+}
+scalar DateTime
+input Location {
+  postalCode: String!
+  street: String
+  city: String
+  country: Country!
+}
+input LocationPair {
+  source: Location!
+  destination: Location!
+}
+type Mutation {
+  _default: String!
+}
+type Query {
+  _default: String!
+  calculateTravelTime(request: CalculateRequest!): CalculateResponse!
+  calculateTravelTimeList(
+    request: CalculateListRequest!
+  ): CalculateListResponse!
+  _service: _Service!
+}
+scalar _Any
+scalar _FieldSet
+type _Service {
+  sdl: String
+}
