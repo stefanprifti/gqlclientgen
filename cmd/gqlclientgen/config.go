@@ -8,10 +8,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var (
-	ErrConfigNotFound = fmt.Errorf("config file not found")
-)
+var ErrConfigNotFound = fmt.Errorf("config file not found")
 
+// Config is the configuration for gqlclientgen
 type Config struct {
 	Version  int `yaml:"version"`
 	Services []struct {

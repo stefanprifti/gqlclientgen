@@ -139,7 +139,16 @@ func GenerateTypesFromOperation(doc *ast.QueryDocument) []byte {
 
 		// Print the response struct
 		fmt.Fprintf(&b, "type %sResponse struct {\n", op.Name)
-		generateResponseTypes(op.SelectionSet, &b, 1)
+
+		selectionSet := op.SelectionSet
+		// TODO: maybe add option to skip the first selection set?
+		// // skip the first selection set, and get is selection set children
+		// if len(op.SelectionSet) == 1 {
+		// 	if v, ok := op.SelectionSet[0].(*ast.Field); ok {
+		// 		selectionSet = v.SelectionSet
+		// 	}
+		// }
+		generateResponseTypes(selectionSet, &b, 1)
 		fmt.Fprintln(&b, "}")
 	}
 	return b.Bytes()

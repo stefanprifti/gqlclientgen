@@ -3,7 +3,7 @@ module github.com/stefanprifti/gql
 go 1.19
 
 require (
-	github.com/stefanprifti/gqlclient v0.0.0-20230209191306-0baf1607cf7a
+	github.com/stefanprifti/gqlclient v0.0.0-20230322203001-d181542c310c
 	github.com/vektah/gqlparser/v2 v2.5.1
 	gopkg.in/yaml.v2 v2.4.0
 )

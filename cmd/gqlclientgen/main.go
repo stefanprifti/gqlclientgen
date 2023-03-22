@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go/format"
 	"html/template"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/stefanprifti/gql/gen"
 	"github.com/stefanprifti/gql/introspect"
@@ -24,7 +26,8 @@ const (
 	clientFile        = "client.go"
 	modelFile         = "model.go"
 	gqlSchemaFile     = "schema.graphql"
-	gqlIntrospectFile = "schema.introspect.json	"
+	gqlIntrospectFile = "schema.introspect.json"
+	configFile        = "gqlclientgen.yml"
 )
 
 type ClientMethod struct {
@@ -64,15 +67,15 @@ type App struct {
 	Services []Service
 }
 
-func New(config Config) *App {
+func New(config Config) (*App, error) {
 	app := &App{}
 
 	err := app.setConfig(config)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return app
+	return app, nil
 }
 
 func (a *App) setConfig(config Config) error {
@@ -160,7 +163,7 @@ func (s *Service) ResolveOperations() error {
 	return nil
 }
 
-// GenerateClientFile generates the client file for the service
+// GenerateIntrospectionFile generates the introspection file for the service
 func (s *Service) GenerateIntrospectionFile() error {
 	introspectFilePath := filepath.Join(s.ClientFolder, gqlIntrospectFile)
 	err := writeFile(introspectFilePath, s.SchemaJSON)
@@ -170,7 +173,7 @@ func (s *Service) GenerateIntrospectionFile() error {
 	return nil
 }
 
-// GenerateClientFile generates the client file for the service
+// GenerateSchemaFile generates the schema file for the service
 func (s *Service) GenerateSchemaFile() error {
 	schemaFilePath := filepath.Join(s.ClientFolder, gqlSchemaFile)
 	err := writeFile(schemaFilePath, []byte(s.SchemaContent))
@@ -253,8 +256,6 @@ func main() {
 		}
 	}()
 
-	configFile := "gqlclientgen.yml"
-
 	config, err := LoadConfig(configFile)
 	if err != nil {
 		if errors.Is(err, ErrConfigNotFound) {
@@ -263,136 +264,78 @@ func main() {
 		}
 	}
 
-	fmt.Println("loaded config: ", config)
-	app := New(config)
+	app, err := New(config)
+	if err != nil {
+		fmt.Println("could not initialize app: ", err)
+		return
+	}
 
-	fmt.Println("services: ", app.Services)
+	err = run(app)
+	if err != nil {
+		fmt.Println("could not generate client: ", err)
+		return
+	}
 
+	fmt.Println("done")
+}
+
+func run(app *App) error {
 	for _, service := range app.Services {
 		fmt.Println("processing service: ", service.Package, " at ", service.SchemaURL, " with operations at ", service.OperationsFolder, " and client at ", service.ClientFolder, "")
 
-		err = service.ResolveSchema()
+		err := service.ResolveSchema()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		err = service.ResolveOperations()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		err = service.GenerateIntrospectionFile()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		err = service.GenerateSchemaFile()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		err = service.GenerateModelFile()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		err = service.GenerateClientFile()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		fmt.Println("Successfully generated client for service: ", service.Package)
 	}
 
-	// for _, service := range config.Services {
-	// 	schema, err := FetchSchema(service.URL)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	schemaBytes, err := introspect.SchemaToText(schema)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	schemaFilePath := filepath.Join(service.Client.Root, gqlSchemaFile)
-	// 	err = writeFile(schemaFilePath, schemaBytes)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	introspectFilePath := filepath.Join(service.Client.Root, gqlIntrospectFile)
-	// 	err = writeFile(introspectFilePath, jsonMarshal(schema))
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	doc, err := gqlparser.LoadSchema(&ast.Source{Name: "schema.graphql", Input: string(schemaBytes)})
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	schemaTypes, err := gen.GenerateTypesFromSchema(service.Package, doc)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	err = writeFile(filepath.Join(service.Client.Root, modelFile), schemaTypes)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	// read filees in a folder
-	// 	files, err := os.ReadDir(service.Operations.Root)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	for _, file := range files {
-	// 		if file.IsDir() {
-	// 			continue
-	// 		}
-
-	// 		if filepath.Ext(file.Name()) != ".graphql" {
-	// 			continue
-	// 		}
-
-	// 		// read the file
-	// 		f, err := os.OpenFile(filepath.Join(service.Operations.Root, file.Name()), os.O_RDONLY, 0644)
-	// 		if err != nil {
-	// 			panic(err)
-	// 		}
-
-	// 		body, err := io.ReadAll(f)
-	// 		if err != nil {
-	// 			panic(err)
-	// 		}
-
-	// 		operationDoc, err := gqlparser.LoadQuery(doc, string(body))
-	// 		if err.Error() != "" {
-	// 			fmt.Println("error:", err)
-	// 		}
-
-	// 		// generate the client
-	// 		operationTypes := gen.GenerateTypesFromOperation(operationDoc)
-
-	// 		// write the client to the file
-	// 		err = writeFile(filepath.Join(service.Client.Root, clientFile), operationTypes)
-	// 		if err != nil {
-	// 			panic(err)
-	// 		}
-	// 	}
-	// }
+	return nil
 }
 
 func writeFile(filePath string, body []byte) error {
 	f, err := openFile(filePath)
 	if err != nil {
-		panic(err)
+		return err
+	}
+
+	// format file content
+	if strings.HasSuffix(filePath, ".go") {
+		body, err = format.Source(body)
+		if err != nil {
+			return err
+		}
 	}
 
 	_, err = f.Write(body)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	return nil
@@ -428,31 +371,4 @@ func FetchSchema(url string) (*introspect.Schema, error) {
 	}
 
 	return schema, nil
-}
-
-// WriteSchema writes the schema to a file
-func schemaBytes(schema *introspect.Schema) []byte {
-	txt, _ := introspect.SchemaToText(schema)
-	return txt
-}
-
-// write a function that writes a file even if directories don't exist
-func createFile(path string) (*os.File, error) {
-	// check if the file exists
-	if _, err := os.Stat(path); err == nil {
-		return nil, fmt.Errorf("file %s already exists", path)
-	}
-
-	// create the file
-	f, err := os.Create(path)
-	if err != nil {
-		return nil, err
-	}
-
-	return f, nil
-}
-
-func jsonMarshal(v interface{}) []byte {
-	body, _ := json.MarshalIndent(v, "", "\t")
-	return body
 }
