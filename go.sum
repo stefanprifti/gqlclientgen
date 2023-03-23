@@ -17,12 +17,6 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sergi/go-diff v1.1.0 h1:we8PVUC3FE2uYfodKH/nBHMSetSfHDR6scGdBi+erh0=
 github.com/sergi/go-diff v1.1.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
-github.com/stefanprifti/gqlclient v0.0.0-20230209191306-0baf1607cf7a h1:p63gV8gY7WrHZAIv3eBjuEaoRann/uW5RuQjx8RxO74=
-github.com/stefanprifti/gqlclient v0.0.0-20230209191306-0baf1607cf7a/go.mod h1:nowSpFV4qPONVOvacK1+QIiy2hD9yKX1Inxq9aTkPGg=
-github.com/stefanprifti/gqlclient v0.0.0-20230322200953-9921812190c1 h1:2tUImFY43Nobeg29FKqNVa+c6GQXt1AWr99ciAVaLa4=
-github.com/stefanprifti/gqlclient v0.0.0-20230322200953-9921812190c1/go.mod h1:nowSpFV4qPONVOvacK1+QIiy2hD9yKX1Inxq9aTkPGg=
-github.com/stefanprifti/gqlclient v0.0.0-20230322202408-2a8d75610a37 h1:59WbO5jWLQ574X7E0y0rWoFvD3cfWfp2Gep1rL8ZZKk=
-github.com/stefanprifti/gqlclient v0.0.0-20230322202408-2a8d75610a37/go.mod h1:nowSpFV4qPONVOvacK1+QIiy2hD9yKX1Inxq9aTkPGg=
 github.com/stefanprifti/gqlclient v0.0.0-20230322203001-d181542c310c h1:VHpL3vJpU1RFvbBbwCDbqRCN4J65hbqUTNeMpbCu2t0=
 github.com/stefanprifti/gqlclient v0.0.0-20230322203001-d181542c310c/go.mod h1:nowSpFV4qPONVOvacK1+QIiy2hD9yKX1Inxq9aTkPGg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

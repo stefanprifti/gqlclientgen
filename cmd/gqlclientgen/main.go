@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/stefanprifti/gql/gen"
-	"github.com/stefanprifti/gql/introspect"
+	"github.com/stefanprifti/gqlclientgen/gen"
+	"github.com/stefanprifti/gqlclientgen/introspect"
 	"github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stefanprifti/gql/gen"
+	"github.com/stefanprifti/gqlclientgen/gen"
 	"github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )

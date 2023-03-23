@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stefanprifti/gql/introspect"
+	"github.com/stefanprifti/gqlclientgen/introspect"
 )
 
 func TestIntrospect(t *testing.T) {

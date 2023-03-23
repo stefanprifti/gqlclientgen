@@ -1,4 +1,4 @@
-module github.com/stefanprifti/gql
+module github.com/stefanprifti/gqlclientgen
 
 go 1.19
 
