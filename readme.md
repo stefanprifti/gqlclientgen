@@ -2,7 +2,7 @@
 
 GQLClientGen is a Golang client generator for GraphQL APIs. It automatically generates Golang clients for GraphQL services, which can be used for interacting with GraphQL APIs in a simple and efficient way.
 
-For the actual GQL Client check this repo [https://github.com/stefanprifti/gqlclient](gqlclient).
+For the actual GQL Client check this repo [gqlclient](https://github.com/stefanprifti/gqlclient).
 
 ### Installation
 Run the following command to install `gqlclientgen`.
