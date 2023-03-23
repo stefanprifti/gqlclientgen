@@ -250,6 +250,10 @@ func writeSchema(schema *Schema, w io.Writer) (err error) {
 	}()
 
 	for _, t := range schema.Types {
+		if t.Name != nil && strings.HasPrefix(*t.Name, "_") {
+			continue
+		}
+
 		switch *t.Kind {
 		case TypeKindScalar:
 			_, err := w.Write([]byte(convertScalar(&t)))
